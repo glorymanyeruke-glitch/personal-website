@@ -29,7 +29,16 @@ export function CopyButton({ targetId, text, labels }: CopyButtonProps) {
   async function copy() {
     clearTimeout(timer.current)
     try {
-      await navigator.clipboard.writeText(text)
+      // Some browsers/webviews leave writeText pending forever (e.g. an unanswered permission
+      // prompt), so give up after 1.5s and fall back to selecting the text.
+      await Promise.race([
+        navigator.clipboard.writeText(text),
+        new Promise((_, reject) =>
+          setTimeout(() => {
+            reject(new Error('clipboard timeout'))
+          }, 1500),
+        ),
+      ])
       setCopied(true)
       setAnnouncement(labels.announceCopied)
       timer.current = setTimeout(() => {

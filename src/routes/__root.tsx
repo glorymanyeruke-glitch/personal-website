@@ -41,9 +41,12 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <SiteHeader />
-      <Outlet />
-      <SiteFooter />
+      {/* Own stacking context: no z-index inside the page can rise above portaled overlays (the menu sheet). */}
+      <div className="isolate">
+        <SiteHeader />
+        <Outlet />
+        <SiteFooter />
+      </div>
     </RootDocument>
   )
 }

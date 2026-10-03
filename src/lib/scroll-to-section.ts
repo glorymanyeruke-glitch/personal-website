@@ -7,13 +7,13 @@ export function scrollToSection(id: string, focusTarget?: HTMLElement | null): v
   const section = document.getElementById(id)
   if (!section) return
   section.scrollIntoView({ block: 'start' })
-
-  const target = focusTarget ?? section.querySelector<HTMLElement>('h2, h1')
-  if (target) {
-    if (!target.hasAttribute('tabindex') && !target.matches('input, textarea, button, a[href]')) {
-      target.setAttribute('tabindex', '-1')
-    }
-    target.focus({ preventScroll: true })
-  }
+  ;(focusTarget ?? sectionFocusTarget(id))?.focus({ preventScroll: true })
   history.replaceState(null, '', `#${id}`)
+}
+
+/** The element that should receive focus for a section: its heading, made focusable. */
+export function sectionFocusTarget(id: string): HTMLElement | null {
+  const heading = document.getElementById(id)?.querySelector<HTMLElement>('h2, h1') ?? null
+  if (heading && !heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1')
+  return heading
 }

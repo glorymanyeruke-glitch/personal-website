@@ -12,7 +12,7 @@ export function SiteHeader() {
         <Link
           to="/"
           hash="top"
-          className="flex items-center gap-3 text-ink no-underline"
+          className="flex min-h-11 items-center gap-3 text-ink no-underline"
           aria-label={ui.homeLabel}
         >
           <Emblem />

@@ -109,6 +109,12 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
   /* Focus ring per context (Phase 0): bronze on paper, gilt-light on myrtle. */
   :focus-visible {
     outline: 2px solid var(--color-bronze);

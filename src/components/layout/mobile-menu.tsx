@@ -1,36 +1,43 @@
 import { Drawer } from '@base-ui/react/drawer'
 import { useRef, useState, type MouseEvent } from 'react'
 import { nav, ui } from '~/content/site'
-import { scrollToSection } from '~/lib/scroll-to-section'
+import { scrollToSection, sectionFocusTarget } from '~/lib/scroll-to-section'
 import { buttonVariants } from '../ui/button'
 import { CloseIcon, MenuIcon } from '../ui/icons'
 
 /**
  * Bottom sheet menu under 1024px (§3.4, §4.2 item 5) — Base UI Drawer: focus trap,
  * Escape/backdrop dismiss, swipe down to dismiss, focus restored to the trigger.
- * Choosing a link closes the sheet first, then scrolls and focuses that section, so
- * focus doesn't bounce back to the Menu button. Enter/exit motion arrives in Phase 4.
+ * Choosing a link closes the sheet, hands its section heading to Base UI as the
+ * `finalFocus` target (instead of the Menu button), then scrolls once the scroll lock is
+ * released. Enter/exit motion arrives in Phase 4.
  */
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
   const pendingSection = useRef<string | null>(null)
+  const returnFocusTo = useRef<HTMLElement | null>(null)
 
   function goTo(event: MouseEvent<HTMLAnchorElement>, href: string) {
     // On another page (e.g. /privacy) let the link load the home page normally.
     if (window.location.pathname !== '/') return
     event.preventDefault()
-    pendingSection.current = href.replace('#', '')
+    const id = href.replace('#', '')
+    pendingSection.current = id
+    returnFocusTo.current = sectionFocusTarget(id)
     setOpen(false)
   }
 
   return (
     <Drawer.Root
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(isOpen) => {
+        if (isOpen) returnFocusTo.current = null
+        setOpen(isOpen)
+      }}
       onOpenChangeComplete={(isOpen) => {
         // Runs after the sheet is gone and scroll lock is released.
         if (!isOpen && pendingSection.current) {
-          scrollToSection(pendingSection.current)
+          scrollToSection(pendingSection.current, returnFocusTo.current)
           pendingSection.current = null
         }
       }}
@@ -41,10 +48,10 @@ export function MobileMenu() {
       </Drawer.Trigger>
 
       <Drawer.Portal>
-        <Drawer.Backdrop className="fixed inset-0 bg-ink/40" />
-        <Drawer.Viewport className="fixed inset-0 flex items-end">
+        <Drawer.Backdrop className="fixed inset-0 z-50 bg-ink/40" />
+        <Drawer.Viewport className="fixed inset-0 z-50 flex items-end">
           <Drawer.Popup
-            finalFocus={() => (pendingSection.current ? false : true)}
+            finalFocus={() => returnFocusTo.current ?? true}
             className="max-h-[85dvh] w-full [transform:translateY(var(--drawer-swipe-movement-y))] overflow-y-auto overscroll-contain border-t border-rule bg-paper px-5 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] text-ink outline-none"
           >
             <Drawer.Content>
