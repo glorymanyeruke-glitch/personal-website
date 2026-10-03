@@ -42,9 +42,11 @@ export function MobileMenu() {
         }
       }}
     >
-      <Drawer.Trigger className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-rule bg-transparent py-0 pr-3.5 pl-3 font-sans text-ui font-medium text-ink lg:hidden [&_svg]:size-[18px]">
+      {/* Below 375px the label is visually hidden (still the accessible name) so the
+          name in the header fits on one line; the button stays a 44px target. */}
+      <Drawer.Trigger className="inline-flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-rule bg-transparent py-0 font-sans text-ui font-medium text-ink min-[375px]:pr-3.5 min-[375px]:pl-3 lg:hidden [&_svg]:size-[18px]">
         <MenuIcon />
-        {ui.menu.open}
+        <span className="max-[374px]:sr-only">{ui.menu.open}</span>
       </Drawer.Trigger>
 
       <Drawer.Portal>

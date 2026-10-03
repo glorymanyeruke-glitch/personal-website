@@ -5,9 +5,9 @@ colour-to-alpha pass, so the marks sit cleanly on `--paper`. **Use them on paper
 dark backgrounds the pass exposes JPEG noise. Replace with a vector emblem when Gloria
 provides one (LAUNCH_BLOCKERS.md).
 
-- `emblem-80.png`, `emblem-120.png` — lion-head crop for the 40px nav mark (2×, 3×)
 - `logo-lockup-336.png`, `logo-lockup-504.png` — full logo for the 168px footer lockup (2×, 3×)
-- Favicons and app icons live in `public/` (paper background, opaque).
+- Favicons and app icons live in `public/` (paper background, opaque), using a lion-head crop: the full logo is unreadable at 16–32px.
+- The header badge uses the original `src/assets/logo.jpeg` directly (full logo in a 48px circle).
 
 ## Open Graph image
 

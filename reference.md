@@ -53,7 +53,7 @@ The provided `index.html` is a **content and structure reference only**. Do **no
 | Three identical rounded cards with the same shadow | "SaaS card kit" | Typographic layout, rules, whitespace |
 | Emoji in buttons (💬 ✉) | Unprofessional on a clinical site | Proper SVG icons (WhatsApp mark from `simple-icons`, mail from `lucide-react`) |
 | "Space to heal. Room to grow." | Generic; could be any therapist | Her own tagline as the hero line (§3.4) |
-| Logo `src="golden-chimera-logo.png"` (file is `logo.jpeg`) | Broken reference; full logo has tiny text unreadable at 42px | Cropped emblem mark for nav/favicon, full lockup only in footer/contact |
+| Logo `src="golden-chimera-logo.png"` (file is `logo.jpeg`) | Broken reference | Full logo in a 48px circular badge in the nav (client decision 2026-10-03); lion-head crop for favicons; full lockup in the footer |
 
 ---
 
@@ -576,3 +576,4 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 | 2026-10-03 | Copy button falls back to selecting the address if `navigator.clipboard.writeText` doesn't settle within 1.5s (seen in some webviews). |
 | 2026-10-03 | Component files use kebab-case (`contact-form.tsx`), not the PascalCase names in §6's tree; components themselves are PascalCase. |
 | 2026-10-03 | Pull quote confirmed as Gloria's own words; placeholder removed. |
+| 2026-10-03 | **Client decision:** header shows the whole logo in a 48px circle with a hairline border (as on the earlier Netlify site), replacing the lion-head crop. Favicons keep the lion head. |

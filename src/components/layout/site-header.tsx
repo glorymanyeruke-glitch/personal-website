@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { nav, person, ui } from '~/content/site'
 import { ButtonLink } from '../ui/button'
-import { Emblem } from './emblem'
+import { LogoBadge } from './logo-badge'
 import { MobileMenu } from './mobile-menu'
 
 /** Sticky 64px header (§3.4). Nav hrefs are "/#section" so they also work from /privacy. */
@@ -15,8 +15,10 @@ export function SiteHeader() {
           className="flex min-h-11 items-center gap-3 text-ink no-underline"
           aria-label={ui.homeLabel}
         >
-          <Emblem />
-          <span className="font-display text-lg leading-none font-medium">{person.name}</span>
+          <LogoBadge />
+          <span className="font-display text-base leading-none font-medium min-[400px]:text-lg">
+            {person.name}
+          </span>
         </Link>
 
         <nav aria-label={ui.mainNavLabel} className="hidden items-center gap-8 text-ui lg:flex">
