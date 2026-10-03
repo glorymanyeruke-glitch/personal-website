@@ -11,7 +11,6 @@ Placeholders in `src/content/site.ts` render visibly as `[PLACEHOLDER: …]`. A 
 | Key | What's needed | Spec |
 | --- | --- | --- |
 | `brand-name` | Is the site primarily "Dr. Gloria Manyeruke" or "Golden Chimera Counselling Centre"? Sets the nav wordmark and page title. | §14.1 |
-| `quote-confirm` | Confirm Gloria wrote the pull quote "Every person brings a unique story, context and set of strengths into therapy." | Phase 0 |
 | `education-years` | Years and institutions for her psychology degrees and PhD. | Phase 0 |
 | `training-years` | Years of her specialist CBT and Positive Psychotherapy training. | Phase 0 |
 | `beck-status` | Is "Candidate Beck Certified Clinician" still current? | Phase 0 |

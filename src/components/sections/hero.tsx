@@ -1,4 +1,5 @@
-import portrait from '~/assets/portrait.jpg?w=480;768;900&aspect=4:5&position=bottom&format=avif;webp;jpg&as=picture'
+// Square crop so the portrait can be a true circle; centred, her face sits at the middle.
+import portrait from '~/assets/portrait.jpg?w=480;768;900&aspect=1:1&format=avif;webp;jpg&as=picture'
 import { contact, hero, person } from '~/content/site'
 import { ButtonLink } from '../ui/button'
 import { WhatsAppIcon } from '../ui/icons'
@@ -7,7 +8,7 @@ import { HeroArc } from './hero-arc'
 import { HeroFormLink } from './hero-form-link'
 
 export { portrait as heroPortrait }
-export const heroPortraitSizes = '(min-width: 1024px) 26vw, (min-width: 768px) 52vw, 64vw'
+export const heroPortraitSizes = '(min-width: 1024px) 30vw, (min-width: 768px) 56vw, 70vw'
 
 /**
  * The one bold moment (§3.5). The tagline is display text, not the h1 — the h1 says who
@@ -43,15 +44,15 @@ export function Hero() {
         </div>
 
         <figure className="col-span-full mt-14 lg:col-span-5 lg:mt-0">
-          {/* Indented so the arc (≈21% wider than the portrait each side) clears the gutter. */}
-          <div className="relative ml-[18%] w-[64%] md:ml-[24%] md:w-[52%] lg:ml-[15%] lg:w-[70%]">
+          {/* Indented so the arc (≈9% wider than the portrait each side) clears the gutter. */}
+          <div className="relative ml-[15%] w-[70%] md:ml-[22%] md:w-[56%] lg:ml-[11%] lg:w-[78%]">
             <HeroArc />
             <Picture
               picture={portrait}
               alt={hero.portraitAlt}
               sizes={heroPortraitSizes}
               loading="eager"
-              className="relative z-10 aspect-[4/5] h-auto w-full rounded-portrait bg-gilt/10 object-cover shadow-portrait"
+              className="relative z-10 aspect-square h-auto w-full rounded-full bg-gilt/10 object-cover shadow-portrait"
             />
           </div>
         </figure>

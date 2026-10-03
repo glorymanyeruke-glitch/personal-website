@@ -1,5 +1,4 @@
 import { about } from '~/content/site'
-import { ContentText } from '../ui/content-text'
 
 export function About() {
   return (
@@ -28,9 +27,7 @@ export function About() {
               {about.quote.text}
             </p>
           </blockquote>
-          <figcaption className="text-ui text-muted">
-            {about.quote.attribution} <ContentText value={about.quote.status} />
-          </figcaption>
+          <figcaption className="text-ui text-muted">{about.quote.attribution}</figcaption>
         </figure>
       </div>
     </section>

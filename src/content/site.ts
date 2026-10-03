@@ -73,8 +73,7 @@ export const about = {
   ],
   quote: {
     text: '“Every person brings a unique story, context and set of strengths into therapy.”',
-    attribution: 'Dr. Gloria Manyeruke',
-    status: ph('quote-confirm', 'Confirm Gloria wrote this quote (it comes from the legacy page).'),
+    attribution: 'Dr. Gloria Manyeruke', // confirmed as Gloria's own words (2026-10-03)
   },
 } as const
 
