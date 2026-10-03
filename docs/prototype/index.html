@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr. Gloria Manyeruke — Psychotherapist (prototype)</title>
+<meta name="description" content="Visual prototype for the Dr. Gloria Manyeruke site. Not the production build.">
+<!-- PROTOTYPE ONLY: fonts from Google Fonts for convenience. Production self-hosts via Fontsource (reference.md §3.2). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap">
+<style>
+/* ───────── Tokens (reference.md §3.1, §3.2, §4.1 + approved Phase 0 additions) ───────── */
+:root {
+  --paper: #FAF6EC;
+  --ink: #2A231B;
+  --muted: #6B6152;
+  --bronze: #7A4A12;
+  --bronze-deep: #5F3A0E;      /* primary button hover only */
+  --gilt: #B8862B;             /* decorative only */
+  --myrtle: #2F4236;
+  --gilt-light: #E2B865;       /* accent on myrtle only */
+  --muted-on-dark: #D9D2C0;    /* 7.1:1 on myrtle */
+  --error: #8E2A1C;            /* 7.8:1 on paper */
+  --error-on-dark: #F4B4A2;    /* 6.1:1 on myrtle */
+  --rule: color-mix(in srgb, var(--gilt) 30%, transparent);
+
+  --font-display: "Newsreader", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-press: 160ms;
+  --duration-small: 200ms;
+  --duration-swap: 240ms;
+  --duration-sheet: 320ms;
+  --duration-hero: 700ms;
+  --duration-arc: 1200ms;
+
+  --gutter: 20px;
+  --header-h: 64px;
+  interpolate-size: allow-keywords; /* lets <details> animate to height:auto (accordion, item 6) */
+}
+@media (min-width: 768px) { :root { --gutter: 32px; } }
+
+/* ───────── Base ───────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.65 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; }
+a { color: var(--bronze); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+.on-dark :focus-visible { outline-color: var(--gilt-light); }
+[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+.wrap { max-width: 72rem; margin-inline: auto; padding-inline: var(--gutter); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.prose { max-width: 40rem; }
+.prose p { margin: 0 0 1.1em; }
+
+h2, h3 { font-family: var(--font-display); font-weight: 500; color: var(--bronze); margin: 0; }
+h2 { font-size: 1.953rem; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 1.75rem; }
+h3 { font-size: 1.25rem; line-height: 1.3; margin-bottom: 0.5rem; }
+@media (min-width: 1024px) { h2 { font-size: 2.441rem; } }
+
+/* Visible placeholder for anything only Gloria can supply */
+.ph {
+  display: inline-block;
+  font: 500 0.8rem/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--gilt) 14%, var(--paper));
+  outline: 1px dashed var(--bronze);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+.on-dark .ph { color: var(--ink); background: var(--paper); outline-color: var(--gilt-light); }
+
+.proto-banner {
+  font: 500 0.8rem/1.4 var(--font-body);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px var(--gutter);
+  text-align: center;
+}
+
+/* ───────── Buttons (item 4: press feedback; hover colour gated to fine pointers) ───────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+  min-height: 48px; padding: 0 1.375rem;
+  border-radius: 999px; border: 1px solid transparent;
+  font: 500 1rem/1 var(--font-body);
+  text-decoration: none; cursor: pointer;
+  transition:
+    transform var(--duration-press) var(--ease-out),
+    background-color var(--duration-small) ease,
+    color var(--duration-small) ease,
+    border-color var(--duration-small) ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn-primary { background: var(--bronze); color: var(--paper); }
+.btn-secondary { background: transparent; color: var(--bronze); border-color: var(--bronze); }
+.btn-on-dark { background: var(--paper); color: var(--myrtle); }
+.btn-outline-dark { background: transparent; color: var(--paper); border-color: color-mix(in srgb, var(--paper) 55%, transparent); }
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover { background: var(--bronze-deep); }
+  .btn-secondary:hover { background: color-mix(in srgb, var(--bronze) 7%, transparent); }
+  .btn-on-dark:hover { background: #fff; }
+  .btn-outline-dark:hover { border-color: var(--paper); }
+  .nav a:hover { color: var(--bronze); }
+}
+
+/* ───────── Header (item 9: hairline fades in after 8px scroll) ───────── */
+.scroll-sentinel { position: absolute; top: 0; left: 0; height: 8px; width: 1px; }
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--paper);
+}
+.site-header::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 1px;
+  background: var(--rule);
+  opacity: 0;
+  transition: opacity var(--duration-small) var(--ease-out);
+}
+.site-header[data-scrolled]::after { opacity: 1; }
+.header-inner { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--ink); }
+.emblem {
+  width: 40px; height: 40px; flex: none;
+  /* Dev stand-in: crop of the raster logo. Needs a vector emblem (LAUNCH_BLOCKERS). */
+  background: url("../../src/assets/logo.jpeg") 47.6% 8% / 165% auto no-repeat;
+  mix-blend-mode: multiply;
+}
+.brand-name { font: 500 1.125rem/1 var(--font-display); letter-spacing: -0.005em; }
+.nav { display: none; align-items: center; gap: 2rem; font-size: 0.9375rem; }
+.nav a { color: var(--ink); text-decoration: none; transition: color var(--duration-small) ease; }
+.nav .btn { min-height: 44px; padding: 0 1.125rem; font-size: 0.9375rem; }
+.nav .btn-primary { color: var(--paper); }
+@media (hover: hover) and (pointer: fine) { .nav .btn-primary:hover { color: var(--paper); } }
+.menu-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  min-height: 44px; padding: 0 0.875rem 0 0.75rem;
+  background: none; border: 1px solid var(--rule); border-radius: 999px;
+  font: 500 0.9375rem/1 var(--font-body); color: var(--ink); cursor: pointer;
+  transition: transform var(--duration-press) var(--ease-out);
+}
+.menu-btn:active { transform: scale(0.97); }
+.menu-btn svg { width: 18px; height: 18px; }
+@media (min-width: 1024px) { .nav { display: flex; } .menu-btn { display: none; } }
+
+/* ───────── Mobile menu sheet (item 5: enters/exits bottom edge) ───────── */
+.sheet {
+  position: fixed; inset: auto 0 0 0; margin: 0;
+  width: 100%; max-width: none; max-height: 85dvh;
+  border: 0; border-top: 1px solid var(--rule);
+  padding: 12px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+  background: var(--paper); color: var(--ink);
+  transform: translateY(0);
+  transition:
+    transform var(--duration-sheet) var(--ease-drawer),
+    overlay var(--duration-sheet) allow-discrete,
+    display var(--duration-sheet) allow-discrete;
+}
+.sheet:not([open]) { transform: translateY(100%); }
+@starting-style { .sheet[open] { transform: translateY(100%); } }
+.sheet::backdrop {
+  background: rgb(42 35 27 / 0.4);
+  opacity: 1;
+  transition:
+    opacity var(--duration-small) var(--ease-out),
+    overlay var(--duration-sheet) allow-discrete,
+    display var(--duration-sheet) allow-discrete;
+}
+.sheet:not([open])::backdrop { opacity: 0; }
+@starting-style { .sheet[open]::backdrop { opacity: 0; } }
+.sheet-top { display: flex; justify-content: space-between; align-items: center; min-height: 52px; }
+.sheet-title { font: 500 0.9375rem/1 var(--font-body); color: var(--muted); margin: 0; }
+.icon-btn {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: none; border: 0; border-radius: 999px; color: var(--ink); cursor: pointer;
+  transition: transform var(--duration-press) var(--ease-out);
+}
+.icon-btn:active { transform: scale(0.97); }
+.icon-btn svg { width: 22px; height: 22px; }
+.sheet ul { list-style: none; margin: 4px 0 24px; padding: 0; }
+.sheet li + li { border-top: 1px solid var(--rule); }
+.sheet li a {
+  display: flex; align-items: center; min-height: 56px;
+  font: 400 1.563rem/1 var(--font-display); color: var(--ink); text-decoration: none;
+}
+.sheet .btn { width: 100%; }
+
+/* ───────── Hero ───────── */
+.hero { padding-block: 40px 72px; }
+.hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 16px; }
+.hero-copy { grid-column: 1 / -1; }
+.tagline {
+  margin: 0;
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: clamp(2.441rem, 5.5vw, 4.768rem);
+  line-height: 1.02; letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.tagline span { display: block; }
+.hero h1 {
+  margin: 2rem 0 0;
+  font: 500 1.563rem/1.2 var(--font-display);
+  color: var(--bronze);
+}
+.role { margin: 0.35rem 0 0; color: var(--muted); font-size: 1rem; }
+.intro { margin: 1.25rem 0 0; max-width: 34rem; }
+.hero-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 2rem; }
+.hero-figure { grid-column: 1 / -1; margin: 56px 0 0; display: flex; }
+.portrait { position: relative; width: 64%; margin-left: 18%; }
+.portrait img {
+  position: relative; z-index: 1;
+  width: 100%; height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover; object-position: 50% 80%; /* face sits in the upper third */
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--gilt) 10%, var(--paper));
+  box-shadow: 0 1px 2px rgb(42 35 27 / 0.06), 0 22px 44px -22px rgb(42 35 27 / 0.32);
+}
+/* The arc: a circle centred on the portrait (not her head — avoids a halo),
+   radius between half-height and half-diagonal so the corners poke past it.
+   Opens at the lower-left like the logo. */
+.arc {
+  position: absolute; z-index: 0; top: 50%; left: 50%;
+  width: 148.4%; aspect-ratio: 1; translate: -50% -50%;
+  overflow: visible; pointer-events: none;
+}
+.arc circle { fill: none; stroke: var(--gilt); stroke-width: 0.28; /* ≈1.25px at desktop size, ≈1px on mobile */ stroke-dasharray: 0.85 1; stroke-dashoffset: 0; }
+
+@media (min-width: 768px) {
+  .hero-actions { flex-direction: row; flex-wrap: wrap; }
+  .portrait { width: 52%; margin-left: 24%; }
+}
+@media (min-width: 1024px) {
+  .hero { padding-block: 72px 112px; }
+  .hero-grid { grid-template-columns: repeat(12, 1fr); column-gap: 24px; align-items: center; }
+  .hero-copy { grid-column: 1 / 8; }
+  .hero h1 { font-size: 1.953rem; margin-top: 2.5rem; }
+  .hero-figure { grid-column: 8 / -1; margin: 0; }
+  .portrait { width: 70%; margin-left: 15%; }
+}
+
+/* Hero motion — first load only (items 1–3) */
+@keyframes rise { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes draw { from { stroke-dashoffset: 0.85; } }
+@keyframes unclip { from { clip-path: inset(8% 8% 8% 8%); } }
+.tagline span { animation: rise var(--duration-hero) var(--ease-out) both; }
+.tagline span:nth-child(2) { animation-delay: 80ms; }
+.tagline span:nth-child(3) { animation-delay: 160ms; }
+.arc circle { animation: draw var(--duration-arc) var(--ease-in-out) 200ms both; }
+.portrait img.reveal { animation: unclip var(--duration-hero) var(--ease-out) both; }
+
+/* ───────── Sections ───────── */
+.section { padding-block: 64px; }
+.section + .section { border-top: 1px solid var(--rule); }
+@media (min-width: 1024px) { .section { padding-block: 96px; } }
+.lede { color: var(--muted); max-width: 40rem; margin: -0.75rem 0 2.5rem; }
+
+/* About */
+.about-grid { display: grid; gap: 40px; }
+.pull {
+  margin: 0; padding-left: 1.25rem; border-left: 1px solid var(--gilt);
+  align-self: start;
+}
+.pull p { margin: 0 0 0.75rem; font: italic 400 1.563rem/1.35 var(--font-display); color: var(--ink); }
+.pull footer { font-size: 0.9375rem; color: var(--muted); }
+@media (min-width: 1024px) {
+  .about-grid { grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+  .about-grid .prose { grid-column: 1 / 8; }
+  .pull { grid-column: 9 / -1; margin-top: 0.4rem; }
+}
+
+/* Approach — prose columns, no numbers, no cards */
+.columns { display: grid; gap: 32px; }
+.columns p { margin: 0; color: var(--ink); }
+@media (min-width: 768px) { .columns { grid-template-columns: repeat(3, 1fr); gap: 40px; } }
+
+/* Help with */
+.help { list-style: none; margin: 0; padding: 0; display: grid; max-width: 52rem; }
+.help li { padding: 0.85rem 0; border-bottom: 1px solid var(--rule); }
+.help li:first-child { border-top: 1px solid var(--rule); }
+@media (min-width: 768px) {
+  .help { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .help li:nth-child(2) { border-top: 1px solid var(--rule); }
+}
+.help-note { margin: 1.75rem 0 0; max-width: 40rem; color: var(--muted); }
+
+/* Timeline — a real sequence, so a line is justified */
+.timeline { list-style: none; margin: 0; padding: 0 0 0 28px; max-width: 44rem; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 3px; top: 10px; bottom: 10px; width: 1px; background: var(--rule); }
+.timeline li { position: relative; padding-bottom: 2.25rem; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before {
+  content: ""; position: absolute; left: -28px; top: 0.6rem;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--gilt);
+}
+.when { margin: 0 0 0.25rem; font-size: 0.9375rem; color: var(--muted); font-variant-numeric: lining-nums tabular-nums; }
+.timeline p:last-child { margin: 0; }
+
+/* Research */
+.research { margin: 0; display: grid; gap: 28px; }
+.research dt { font: 500 1.25rem/1.3 var(--font-display); color: var(--bronze); margin-bottom: 0.35rem; }
+.research dd { margin: 0; color: var(--ink); }
+@media (min-width: 768px) { .research { grid-template-columns: repeat(3, 1fr); gap: 40px; } }
+
+/* FAQ (item 6: height + opacity, 200ms) */
+.faq { max-width: 48rem; border-top: 1px solid var(--rule); }
+.faq details { border-bottom: 1px solid var(--rule); }
+.faq summary {
+  list-style: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  min-height: 64px; padding: 0.75rem 0;
+  font: 500 1.25rem/1.3 var(--font-display); color: var(--ink);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq .pm { position: relative; width: 14px; height: 14px; flex: none; }
+.faq .pm::before, .faq .pm::after { content: ""; position: absolute; background: var(--bronze); }
+.faq .pm::before { left: 0; right: 0; top: 6.5px; height: 1px; }
+.faq .pm::after { top: 0; bottom: 0; left: 6.5px; width: 1px; }
+.faq details[open] .pm::after { display: none; } /* state swap, not animated */
+.faq details::details-content {
+  block-size: 0; opacity: 0; overflow: hidden;
+  transition:
+    block-size var(--duration-small) var(--ease-out),
+    opacity var(--duration-small) var(--ease-out),
+    content-visibility var(--duration-small) allow-discrete;
+}
+.faq details[open]::details-content { block-size: auto; opacity: 1; }
+.faq .answer { padding: 0 0 1.25rem; max-width: 40rem; }
+.faq .answer p { margin: 0; }
+
+/* ───────── Contact — the one myrtle band ───────── */
+.contact { background: var(--myrtle); color: var(--paper); padding-block: 64px 72px; }
+.contact h2 { color: var(--paper); }
+.contact a:not(.btn) { color: var(--gilt-light); }
+.contact-grid { display: grid; gap: 56px; }
+@media (min-width: 1024px) {
+  .contact { padding-block: 96px 104px; }
+  .contact-grid { grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+  .contact-side { grid-column: 1 / 6; }
+  .contact-form-wrap { grid-column: 7 / -1; }
+}
+.contact-side .intro-dark { color: var(--muted-on-dark); margin: -0.5rem 0 2rem; max-width: 30rem; }
+.channel { padding: 1.25rem 0; border-top: 1px solid rgb(250 246 236 / 0.16); }
+.channel:last-of-type { border-bottom: 1px solid rgb(250 246 236 / 0.16); }
+.channel-label { margin: 0 0 0.5rem; font-size: 0.9375rem; color: var(--muted-on-dark); }
+.phone { margin: 0.75rem 0 0; font-variant-numeric: lining-nums tabular-nums; color: var(--muted-on-dark); font-size: 0.9375rem; }
+.email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; }
+.email-addr { font-size: 1.0625rem; color: var(--paper); user-select: all; overflow-wrap: anywhere; }
+.copy-btn { min-height: 44px; padding: 0 1rem; font-size: 0.9375rem; }
+/* Item 10: stacked labels crossfade, interruptible transitions */
+.swap-label { display: inline-grid; }
+.swap-label > span {
+  grid-area: 1 / 1; display: inline-flex; align-items: center; gap: 0.45rem; justify-content: center;
+  transition: opacity var(--duration-press) var(--ease-out), filter var(--duration-press) var(--ease-out);
+}
+.swap-label svg { width: 16px; height: 16px; }
+[data-state] .swap-label > span:not([data-for~="idle"]) { opacity: 0; filter: blur(2px); }
+[data-state="copied"] .swap-label > [data-for~="idle"],
+[data-state="sending"] .swap-label > [data-for~="idle"],
+[data-state="sent"] .swap-label > [data-for~="idle"] { opacity: 0; filter: blur(2px); }
+[data-state="copied"] .swap-label > [data-for~="copied"],
+[data-state="sending"] .swap-label > [data-for~="sending"],
+[data-state="sent"] .swap-label > [data-for~="sent"] { opacity: 1; filter: none; }
+.crisis {
+  margin: 2rem 0 0; padding-left: 1rem; border-left: 1px solid var(--gilt-light);
+  color: var(--muted-on-dark); font-size: 0.9375rem; max-width: 30rem;
+}
+.crisis strong { color: var(--paper); font-weight: 500; }
+
+/* Form */
+.form-note {
+  margin: 0 0 1.75rem; padding: 0.875rem 1rem;
+  border: 1px solid rgb(250 246 236 / 0.24); border-radius: 6px;
+  font-size: 0.9375rem; color: var(--muted-on-dark);
+}
+.stack { display: grid; }
+.stack > * { grid-area: 1 / 1; }
+.form, .success {
+  transition:
+    opacity var(--duration-swap) var(--ease-out),
+    transform var(--duration-swap) var(--ease-out),
+    visibility var(--duration-swap) allow-discrete;
+}
+.success { opacity: 0; transform: scale(0.98); visibility: hidden; align-self: start; }
+.stack[data-done] .form { opacity: 0; transform: scale(0.98); visibility: hidden; }
+.stack[data-done] .success { opacity: 1; transform: none; visibility: visible; }
+.field { margin-bottom: 1.375rem; }
+.field > label, .legend { display: block; margin-bottom: 0.4rem; font-size: 0.9375rem; font-weight: 500; color: var(--paper); }
+.optional { font-weight: 400; color: var(--muted-on-dark); }
+.input {
+  width: 100%; min-height: 48px; padding: 0.7rem 0.875rem;
+  font: 400 1.0625rem/1.4 var(--font-body); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--paper); border-radius: 6px;
+}
+textarea.input { min-height: 144px; resize: vertical; }
+.input[aria-invalid="true"] { border-color: var(--error-on-dark); box-shadow: 0 0 0 1px var(--error-on-dark); }
+.help-text { margin: 0.4rem 0 0; font-size: 0.875rem; color: var(--muted-on-dark); }
+.help-row { display: flex; justify-content: space-between; gap: 1rem; }
+.count { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.error { margin: 0.4rem 0 0; font-size: 0.875rem; color: var(--error-on-dark); display: flex; gap: 0.4rem; }
+.error::before { content: "Error:"; font-weight: 600; }
+.error[hidden] { display: none; }
+fieldset { border: 0; margin: 0 0 1.375rem; padding: 0; min-width: 0; }
+.radios { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+.radio, .check { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; }
+.check { align-items: flex-start; padding-top: 0.6rem; }
+.radio input, .check input { width: 20px; height: 20px; margin: 0; accent-color: var(--gilt-light); flex: none; }
+.check input { margin-top: 0.15rem; }
+.two { display: grid; gap: 0 1.25rem; }
+@media (min-width: 640px) { .two { grid-template-columns: 1fr 1fr; } }
+.turnstile {
+  width: 300px; max-width: 100%; height: 65px; margin: 0.5rem 0 1.5rem;
+  display: grid; place-items: center;
+  border: 1px dashed rgb(250 246 236 / 0.4); border-radius: 4px;
+  font: 500 0.8rem/1 ui-monospace, Menlo, monospace; color: var(--muted-on-dark);
+}
+.submit { min-width: 13rem; } /* fixed min width so labels crossfade without a layout animation (item 7) */
+.submit[disabled] { cursor: progress; }
+.success h3 { color: var(--paper); font-size: 1.563rem; margin-bottom: 0.75rem; }
+.success p { color: var(--muted-on-dark); margin: 0 0 1.5rem; max-width: 30rem; }
+
+/* ───────── Footer ───────── */
+.site-footer { padding-block: 56px 40px; text-align: center; font-size: 0.875rem; color: var(--muted); }
+.lockup { width: 168px; height: auto; margin: 0 auto 1.25rem; mix-blend-mode: multiply; }
+.site-footer p { margin: 0.25rem 0; }
+
+/* ───────── Reduced motion: keep opacity, drop movement/blur/clip ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .tagline span { animation-name: fade-in; }
+  .arc circle { animation: fade-in var(--duration-hero) var(--ease-out) 200ms both; }
+  .portrait img.reveal { animation: none; }
+  .btn:active, .menu-btn:active, .icon-btn:active { transform: none; }
+  .sheet, .sheet:not([open]) { transform: none; }
+  .sheet { opacity: 1; transition: opacity var(--duration-small) var(--ease-out), overlay var(--duration-small) allow-discrete, display var(--duration-small) allow-discrete; }
+  .sheet:not([open]) { opacity: 0; }
+  @starting-style { .sheet[open] { transform: none; opacity: 0; } }
+  .faq details::details-content { transition: opacity var(--duration-small) var(--ease-out), content-visibility var(--duration-small) allow-discrete; }
+  .swap-label > span { filter: none !important; }
+  .form, .success, .stack[data-done] .form { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="scroll-sentinel" aria-hidden="true"></div>
+<a class="visually-hidden" href="#main">Skip to content</a>
+<div class="proto-banner">Prototype for review: layout, type, colour and motion. Not the production build. Dashed boxes mark content only Gloria can supply.</div>
+
+<header class="site-header" id="top">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Dr. Gloria Manyeruke, home">
+      <span class="emblem" aria-hidden="true"></span>
+      <span class="brand-name">Dr. Gloria Manyeruke</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#approach">Approach</a>
+      <a href="#questions">Questions</a>
+      <a class="btn btn-primary" href="#contact">Contact</a>
+    </nav>
+    <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" id="menu-open">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+      Menu
+    </button>
+  </div>
+</header>
+
+<dialog class="sheet" id="menu" aria-labelledby="menu-title">
+  <div class="sheet-top">
+    <p class="sheet-title" id="menu-title">Menu</p>
+    <button class="icon-btn" type="button" id="menu-close" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#questions">Questions</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn-primary" href="#contact">Contact</a>
+</dialog>
+
+<main id="main">
+  <!-- HERO — the one bold moment -->
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="tagline"><span>In flow,</span> <span>flourish,</span> <span>becoming more.</span></p>
+        <h1 id="hero-name">Dr. Gloria Manyeruke</h1>
+        <p class="role">Psychotherapist</p>
+        <p class="intro">I offer integrative, evidence-informed psychotherapy with a culturally responsive approach, face to face and online.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://wa.me/905338580094?text=Hello%20Dr.%20Manyeruke%2C%20I%27d%20like%20to%20ask%20about%20psychotherapy%20sessions." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Message on WhatsApp
+          </a>
+          <a class="btn btn-secondary" href="#contact-form" id="to-form">Send a message</a>
+        </div>
+      </div>
+      <figure class="hero-figure">
+        <div class="portrait">
+          <svg class="arc" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <circle cx="50" cy="50" r="48" pathLength="1" transform="rotate(162 50 50)"/>
+          </svg>
+          <img id="portrait" src="../../src/assets/potrait.jpeg" width="900" height="1125" alt="Dr. Gloria Manyeruke, smiling, wearing a dark blazer over a striped shirt" fetchpriority="high">
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="about-h">
+    <div class="wrap about-grid">
+      <div class="prose">
+        <h2 id="about-h">About me</h2>
+        <p>I have worked in counselling since 2017, beginning at the Near East Counselling Centre. Since 2020, I have provided psychotherapy to clients face to face and online.</p>
+        <p>My approach is integrative. I work mainly with Cognitive Behavioral Therapy and Positive Transcultural Psychotherapy, and draw on other evidence-based interventions according to what each person needs.</p>
+        <p>I have worked with people from African, European and Middle Eastern cultural backgrounds, and I see cultural understanding as an important part of effective therapy.</p>
+      </div>
+      <figure class="pull">
+        <blockquote><p>“Every person brings a unique story, context and set of strengths into therapy.”</p></blockquote>
+        <footer>Dr. Gloria Manyeruke <span class="ph">[PLACEHOLDER: confirm Gloria wrote this]</span></footer>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="approach" aria-labelledby="approach-h">
+    <div class="wrap">
+      <h2 id="approach-h">How I work</h2>
+      <p class="lede">Structured psychological methods, with attention to the whole person and their cultural context.</p>
+      <div class="columns">
+        <div><h3>Integrative</h3><p>Different therapeutic perspectives and interventions can be combined to respond to each person’s needs and goals.</p></div>
+        <div><h3>Evidence-informed</h3><p>I value approaches supported by research, and keep developing my knowledge through professional education and specialist training.</p></div>
+        <div><h3>Culturally responsive</h3><p>Culture, identity, relationships and life context matter. I aim to offer a space that is respectful, collaborative and culturally aware.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="help" aria-labelledby="help-h">
+    <div class="wrap">
+      <h2 id="help-h">What I can help with</h2>
+      <ul class="help">
+        <li>Anxiety and worry</li>
+        <li>Low mood and depression</li>
+        <li>Trauma and PTSD</li>
+        <li>Bipolar disorder</li>
+        <li>Schizophrenia</li>
+        <li>Borderline personality disorder</li>
+        <li>Relationships and life transitions</li>
+      </ul>
+      <p class="help-note">You don’t need a diagnosis to start. I also work with people who are struggling with relationships, life circumstances, emotional wellbeing or personal concerns.</p>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="exp-h">
+    <div class="wrap">
+      <h2 id="exp-h">Education and experience</h2>
+      <ol class="timeline">
+        <li>
+          <p class="when"><span class="ph">[PLACEHOLDER: years and institutions]</span></p>
+          <h3>Psychology studies and a PhD in Psychological Counselling and Guidance</h3>
+          <p>Undergraduate and master’s studies in Psychology, followed by doctoral training in psychological counselling and guidance.</p>
+        </li>
+        <li>
+          <p class="when">Since 2017</p>
+          <h3>Counselling practice</h3>
+          <p>Professional counselling work, beginning at the Near East Counselling Centre.</p>
+        </li>
+        <li>
+          <p class="when">Since 2020</p>
+          <h3>Psychotherapy, face to face and online</h3>
+          <p>Providing psychotherapy to clients in person and through online sessions.</p>
+        </li>
+        <li>
+          <p class="when">Professional development <span class="ph">[PLACEHOLDER: years]</span></p>
+          <h3>Specialist training</h3>
+          <p>CBT for depression, anxiety, multiple traumas and personality disorders; basic training in Positive Transcultural Psychotherapy. Candidate Beck Certified Clinician <span class="ph">[PLACEHOLDER: confirm current status]</span></p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="research" aria-labelledby="research-h">
+    <div class="wrap">
+      <h2 id="research-h">Research interests</h2>
+      <dl class="research">
+        <div><dt>Migration psychology</dt><dd>Adaptation, identity, belonging and wellbeing during migration and cultural transition.</dd></div>
+        <div><dt>Positive psychology and wellbeing</dt><dd>Strengths, resilience and the factors that support psychological wellbeing.</dd></div>
+        <div><dt>Developmental psychology</dt><dd>How experiences across the lifespan shape wellbeing and adaptation.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="questions" aria-labelledby="faq-h">
+    <div class="wrap">
+      <h2 id="faq-h">Questions you might have</h2>
+      <div class="faq">
+        <details name="faq"><summary>What happens in the first session?<span class="pm" aria-hidden="true"></span></summary><div class="answer"><p><span class="ph">[PLACEHOLDER: Gloria’s answer]</span></p></div></details>
+        <details name="faq"><summary>Is what I say confidential?<span class="pm" aria-hidden="true"></span></summary><div class="answer"><p><span class="ph">[PLACEHOLDER: confidentiality and its limits]</span></p></div></details>
+        <details name="faq"><summary>Do you offer sessions online or in person?<span class="pm" aria-hidden="true"></span></summary><div class="answer"><p><span class="ph">[PLACEHOLDER: location and online platform]</span></p></div></details>
+        <details name="faq"><summary>How many sessions will I need?<span class="pm" aria-hidden="true"></span></summary><div class="answer"><p><span class="ph">[PLACEHOLDER: Gloria’s answer]</span></p></div></details>
+        <details name="faq"><summary>How long are sessions, and what do they cost?<span class="pm" aria-hidden="true"></span></summary><div class="answer"><p><span class="ph">[PLACEHOLDER: session length, fees, initial call]</span></p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact on-dark" id="contact" aria-labelledby="contact-h">
+    <div class="wrap contact-grid">
+      <div class="contact-side">
+        <h2 id="contact-h">Getting in touch</h2>
+        <p class="intro-dark">If you’re considering therapy and would like to ask about working together, you’re welcome to get in touch. A short message is enough.</p>
+
+        <div class="channel">
+          <p class="channel-label">Usually the quickest way</p>
+          <a class="btn btn-on-dark" href="https://wa.me/905338580094?text=Hello%20Dr.%20Manyeruke%2C%20I%27d%20like%20to%20ask%20about%20psychotherapy%20sessions." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Message on WhatsApp
+          </a>
+          <p class="phone">+90 533 858 0094</p>
+        </div>
+
+        <div class="channel">
+          <p class="channel-label">Prefer your own inbox?</p>
+          <div class="email-row">
+            <span class="email-addr" id="email-addr">drgloriapsy@gmail.com</span>
+            <button class="btn btn-outline-dark copy-btn" type="button" id="copy-btn" data-state="idle" aria-describedby="email-addr">
+              <span class="swap-label">
+                <span data-for="idle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</span>
+                <span data-for="copied" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied</span>
+              </span>
+            </button>
+          </div>
+          <p class="visually-hidden" aria-live="polite" id="copy-status"></p>
+        </div>
+
+        <p class="crisis"><strong>In an emergency</strong>, please don’t wait for a reply: contact your local emergency services. <span class="ph">[PLACEHOLDER: emergency numbers for clients’ regions]</span></p>
+      </div>
+
+      <div class="contact-form-wrap" id="contact-form">
+        <p class="form-note">This form is not monitored for emergencies. If you or someone else is in immediate danger, contact your local emergency services.</p>
+        <div class="stack" id="stack">
+          <form class="form" id="form" novalidate>
+            <div class="two">
+              <div class="field">
+                <label for="f-name">Name</label>
+                <input class="input" id="f-name" name="name" autocomplete="name" maxlength="80" aria-describedby="e-name">
+                <p class="error" id="e-name" hidden>Enter your name.</p>
+              </div>
+              <div class="field">
+                <label for="f-email">Email</label>
+                <input class="input" id="f-email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="e-email">
+                <p class="error" id="e-email" hidden>Enter an email address like name@example.com.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone <span class="optional" id="phone-opt">(optional)</span></label>
+              <input class="input" id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="20" aria-describedby="e-phone">
+              <p class="error" id="e-phone" hidden>Enter a phone number so Gloria can reply the way you asked.</p>
+            </div>
+            <fieldset>
+              <legend class="legend">How should Gloria reply?</legend>
+              <div class="radios">
+                <label class="radio"><input type="radio" name="preferredContact" value="email" checked> Email</label>
+                <label class="radio"><input type="radio" name="preferredContact" value="whatsapp"> WhatsApp</label>
+                <label class="radio"><input type="radio" name="preferredContact" value="phone"> Phone call</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend class="legend">Type of session</legend>
+              <div class="radios">
+                <label class="radio"><input type="radio" name="sessionType" value="online"> Online</label>
+                <label class="radio"><input type="radio" name="sessionType" value="in-person"> In person</label>
+                <label class="radio"><input type="radio" name="sessionType" value="not-sure" checked> Not sure yet</label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label for="f-message">Message</label>
+              <textarea class="input" id="f-message" name="message" maxlength="1000" aria-describedby="h-message e-message"></textarea>
+              <div class="help-row">
+                <p class="help-text" id="h-message">A short note is enough. Please don’t include detailed health information here — we can talk about that privately.</p>
+                <p class="help-text count" id="count" aria-hidden="true">0 / 1000</p>
+              </div>
+              <p class="error" id="e-message" hidden>Write at least 10 characters.</p>
+            </div>
+            <div class="field">
+              <label class="check"><input type="checkbox" id="f-consent" name="consent" aria-describedby="e-consent"> <span>I agree to my details being used to reply to this enquiry, as described in the <a href="#privacy">privacy notice</a>.</span></label>
+              <p class="error" id="e-consent" hidden>Tick the box so Gloria can use your details to reply.</p>
+            </div>
+            <div class="turnstile" aria-hidden="true">Cloudflare Turnstile</div>
+            <button class="btn btn-on-dark submit" type="submit" id="submit" data-state="idle">
+              <span class="swap-label">
+                <span data-for="idle">Send message</span>
+                <span data-for="sending" aria-hidden="true">Sending…</span>
+                <span data-for="sent" aria-hidden="true">Sent</span>
+              </span>
+            </button>
+            <p class="visually-hidden" aria-live="polite" id="form-status"></p>
+          </form>
+          <div class="success" id="success" aria-hidden="true">
+            <h3 tabindex="-1" id="success-h">Thank you, your message has been sent.</h3>
+            <p>Gloria usually replies within <span class="ph">[PLACEHOLDER: reply time]</span>. If it’s easier, you can also message her on WhatsApp.</p>
+            <a class="btn btn-outline-dark" href="https://wa.me/905338580094" target="_blank" rel="noopener">Message on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <img class="lockup" src="../../src/assets/logo.jpeg" width="1254" height="1254" alt="Golden Chimera Counselling Centre. In flow, flourish, becoming more." loading="lazy">
+    <p>© 2026 Golden Chimera Counselling Centre · Dr. Gloria Manyeruke, Psychotherapist</p>
+    <p><a href="#privacy" id="privacy">Privacy notice</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Item 3: start the portrait reveal when the image arrives, not at first paint.
+  // Already cached → no animation (nothing would pop in anyway).
+  const img = document.getElementById('portrait');
+  if (!img.complete) img.addEventListener('load', () => img.classList.add('reveal'), { once: true });
+
+  // Item 9: hairline under the header once scrolled past 8px.
+  const header = document.querySelector('.site-header');
+  new IntersectionObserver(([e]) => header.toggleAttribute('data-scrolled', !e.isIntersecting))
+    .observe(document.querySelector('.scroll-sentinel'));
+
+  // Item 5: mobile menu sheet. Prototype uses <dialog>; production uses Base UI Drawer.
+  const menu = document.getElementById('menu');
+  const opener = document.getElementById('menu-open');
+  opener.addEventListener('click', () => menu.showModal());
+  document.getElementById('menu-close').addEventListener('click', () => menu.close());
+  menu.addEventListener('click', (e) => { if (e.target === menu) menu.close(); });
+  menu.addEventListener('close', () => opener.focus());
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => menu.close()));
+
+  // "Send a message": scroll to the form and focus the first field (§7.1).
+  document.getElementById('to-form').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('contact-form').scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' });
+    document.getElementById('f-name').focus({ preventScroll: true });
+  });
+
+  // Item 10: copy email, "Copied" for 2s, announced politely.
+  const copyBtn = document.getElementById('copy-btn');
+  const status = document.getElementById('copy-status');
+  let copyTimer;
+  copyBtn.addEventListener('click', async () => {
+    const text = document.getElementById('email-addr').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.dataset.state = 'copied';
+      status.textContent = 'Email address copied.';
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => { copyBtn.dataset.state = 'idle'; status.textContent = ''; }, 2000);
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById('email-addr'));
+      getSelection().removeAllRanges(); getSelection().addRange(range);
+      status.textContent = 'Email address selected. Copy it with your device’s copy command.';
+    }
+  });
+
+  // Form: client validation preview + simulated send (items 7–8). No network.
+  const form = document.getElementById('form');
+  const msg = document.getElementById('f-message');
+  const count = document.getElementById('count');
+  msg.addEventListener('input', () => { count.textContent = `${msg.value.length} / 1000`; });
+  const phoneOpt = document.getElementById('phone-opt');
+  form.addEventListener('change', (e) => {
+    if (e.target.name === 'preferredContact') phoneOpt.hidden = e.target.value !== 'email';
+  });
+
+  const setError = (input, errId, bad) => {
+    input.setAttribute('aria-invalid', String(bad));
+    document.getElementById(errId).hidden = !bad;
+    return bad;
+  };
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = form.elements;
+    const method = f.preferredContact.value;
+    const checks = [
+      [f.name, 'e-name', f.name.value.trim().length < 1],
+      [f.email, 'e-email', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())],
+      [f.phone, 'e-phone', method !== 'email' && !/^[0-9 +()\-]{5,20}$/.test(f.phone.value.trim())],
+      [msg, 'e-message', msg.value.trim().length < 10],
+      [f.consent, 'e-consent', !f.consent.checked],
+    ];
+    const firstBad = checks.filter(([i, id, bad]) => setError(i, id, bad)).map(([i]) => i)[0];
+    if (firstBad) { firstBad.focus(); return; }
+
+    const btn = document.getElementById('submit');
+    const fs = document.getElementById('form-status');
+    btn.disabled = true; btn.dataset.state = 'sending'; fs.textContent = 'Sending your message.';
+    setTimeout(() => {
+      btn.dataset.state = 'sent';
+      setTimeout(() => {
+        const stack = document.getElementById('stack');
+        const success = document.getElementById('success');
+        form.inert = true;
+        stack.toggleAttribute('data-done', true);
+        success.removeAttribute('aria-hidden');
+        document.getElementById('success-h').focus({ preventScroll: true });
+      }, 600);
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>

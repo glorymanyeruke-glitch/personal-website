@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.output/
+.netlify/
+.tanstack/
+.vinxi/
+coverage/
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store

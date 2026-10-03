@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dr. Gloria Manyeruke — Psychotherapist offering integrative, evidence-informed and culturally responsive psychotherapy.">
+<title>Dr. Gloria Manyeruke | Psychotherapist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f7f3ed;--paper:#fffdf9;--sage:#66766a;--sage-dark:#3d5045;--terracotta:#b96f5b;--terracotta-dark:#945342;--ink:#27312c;--muted:#68716c;--line:#e4ddd3;--shadow:0 20px 55px rgba(55,53,45,.11);--radius:24px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--cream);font-family:"DM Sans",sans-serif;line-height:1.7}a{text-decoration:none;color:inherit}
+.nav{position:sticky;top:0;z-index:30;background:rgba(247,243,237,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(228,221,211,.8)}
+.nav-inner{max-width:1180px;margin:auto;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}.brand{font:600 21px "Playfair Display",serif;color:var(--sage-dark)}
+.brand-logo{width:42px;height:42px;object-fit:contain;border-radius:10px}.nav-links{display:flex;gap:24px;font-size:13px;color:var(--muted);align-items:center}.nav-links a:hover{color:var(--terracotta-dark)}
+.nav-cta{padding:9px 15px;border-radius:999px;background:var(--sage-dark);color:#fff!important}
+.hero{max-width:1180px;margin:auto;min-height:700px;padding:72px 24px 90px;display:grid;grid-template-columns:1.05fr .95fr;gap:65px;align-items:center}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:11px;font-weight:700;color:var(--terracotta-dark);margin-bottom:15px}
+h1,h2,h3{font-family:"Playfair Display",serif;font-weight:600;line-height:1.16}h1{font-size:clamp(48px,6vw,78px);margin:0 0 18px;color:var(--sage-dark)}
+.hero h2{font:600 20px "DM Sans",sans-serif;color:var(--terracotta-dark);margin:0 0 20px}.hero p{max-width:650px;font-size:17px;color:var(--muted)}
+.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:999px;font-size:14px;font-weight:700;border:1px solid var(--sage-dark);transition:.2s}.btn-primary{background:var(--sage-dark);color:#fff}.btn-primary:hover{transform:translateY(-2px);background:#304137}.btn-outline{color:var(--sage-dark);background:transparent}.btn-outline:hover{background:#fff}
+.photo-wrap{position:relative;max-width:470px;justify-self:center}.photo-wrap:before{content:"";position:absolute;inset:24px -18px -18px 18px;border:1px solid #cbbba8;border-radius:32px;transform:rotate(3deg)}
+.photo{position:relative;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 43%;border-radius:32px;box-shadow:var(--shadow);display:block}
+.credential{position:absolute;left:-28px;bottom:28px;background:var(--paper);padding:16px 19px;border-radius:18px;box-shadow:var(--shadow);font-size:12px;color:var(--sage-dark);max-width:225px}.credential strong{display:block;font-size:14px;margin-bottom:3px}
+section{padding:88px 24px}.soft{background:var(--paper)}.section-inner{max-width:1000px;margin:auto}.heading{max-width:720px;margin-bottom:40px}.heading h2{font-size:clamp(36px,4vw,52px);margin:0 0 12px;color:var(--sage-dark)}.heading p{color:var(--muted);margin:0}
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:50px}.about-copy p{margin-top:0;color:#4d5751}
+.quote{background:var(--cream);border-radius:var(--radius);padding:30px;border-left:4px solid var(--terracotta)}.quote p{font:25px/1.4 "Playfair Display",serif;color:var(--sage-dark);margin:0 0 14px}.quote small{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{background:var(--cream);padding:28px;border-radius:var(--radius);border:1px solid var(--line)}.num{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#e9dfd4;color:var(--terracotta-dark);font-weight:700;margin-bottom:18px}.card h3{font-size:25px;color:var(--sage-dark);margin:0 0 10px}.card p{color:var(--muted);font-size:15px;margin:0}
+.timeline{border-left:2px solid #d9cfc3;margin-left:8px;padding-left:30px}.timeline-item{position:relative;margin-bottom:35px}.timeline-item:before{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--terracotta);left:-37px;top:7px;border:4px solid var(--paper);box-sizing:content-box}.timeline-item h3{margin:0 0 5px;color:var(--sage-dark);font-size:25px}.year{color:var(--terracotta-dark);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.timeline-item p{color:var(--muted);margin:8px 0 0}
+.research{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.pill{padding:25px;border:1px solid var(--line);border-radius:20px;background:#fff;min-height:145px}.pill h3{margin:0 0 8px;color:var(--sage-dark);font-size:23px}.pill p{margin:0;color:var(--muted);font-size:14px}
+.contact{background:var(--sage-dark);color:#fff;text-align:center;position:relative;overflow:hidden}.contact:after{content:"";position:absolute;width:330px;height:330px;border:1px solid rgba(255,255,255,.13);border-radius:50%;right:-110px;top:-130px}.contact .section-inner{position:relative;z-index:2}.contact h2{font-size:clamp(38px,5vw,58px);margin:0 0 15px}.contact p{color:rgba(255,255,255,.78);max-width:650px;margin:0 auto 25px}.contact .btn{color:#fff;border-color:rgba(255,255,255,.55)}.contact .btn-primary{background:var(--terracotta);border-color:var(--terracotta)}.contact .btn-outline:hover{color:var(--sage-dark)}
+.contact-details{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:20px;font-size:14px}.contact-details a{padding:9px 13px;border:1px solid rgba(255,255,255,.22);border-radius:999px}
+footer{background:#33443b;color:rgba(255,255,255,.7);padding:22px 24px;text-align:center;font-size:12px}
+@media(max-width:800px){.nav-links{display:none}.hero{grid-template-columns:1fr;padding-top:50px}.photo-wrap{order:-1;width:min(100%,430px)}.about-grid,.cards,.research{grid-template-columns:1fr}section{padding:65px 20px}.credential{left:10px;bottom:18px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a class="brand" href="#home"><img class="brand-logo" src="golden-chimera-logo.png" alt="Golden Chimera Counselling Centre logo"><span>Golden Chimera</span></a>
+<div class="nav-links">
+<a href="#about">About</a><a href="#approach">Approach</a><a href="#experience">Experience</a><a href="#research">Research</a>
+<a class="nav-cta" href="#contact">Contact</a>
+</div></div></nav>
+
+<header class="hero" id="home">
+<div>
+<div class="eyebrow">Psychotherapist · PhD</div>
+<h1>Space to heal.<br>Room to grow.</h1>
+<h2>Dr. Gloria Manyeruke</h2>
+<p>I am a psychotherapist offering integrative, evidence-informed care with a culturally responsive approach. My work brings together Cognitive Behavioral Therapy and Positive Transcultural Psychotherapy to support people through psychological difficulties, relationships, life transitions and personal growth.</p>
+<div class="buttons">
+<a class="btn btn-primary" href="https://wa.me/905338580094" target="_blank" rel="noopener">💬 WhatsApp</a>
+<a class="btn btn-outline" href="mailto:drgloriapsy@gmail.com?subject=Psychotherapy%20Enquiry">✉ Email me</a>
+</div></div>
+<div class="photo-wrap">
+<img class="photo" src="gloria-manyeruke.jpg" alt="Dr. Gloria Manyeruke, psychotherapist">
+<div class="credential"><strong>Integrative & culturally responsive</strong>Evidence-informed psychotherapy with a commitment to continued professional education.</div>
+</div>
+</header>
+
+<section class="soft" id="about"><div class="section-inner">
+<div class="heading"><div class="eyebrow">About me</div><h2>A compassionate, evidence-informed approach</h2><p>Psychotherapy that respects both the individual and the cultural context in which their story unfolds.</p></div>
+<div class="about-grid"><div class="about-copy">
+<p>I have worked in counselling since 2017, beginning at the Near East Counselling Centre. Since 2020, I have provided psychotherapy to both face-to-face and online clients.</p>
+<p>My approach is integrative. I orient my practice toward Cognitive Behavioral Therapy and Positive Transcultural Psychotherapy, while drawing on evidence-based psychological interventions according to each client's needs.</p>
+<p>I have experience working with clients experiencing PTSD, generalized anxiety, depression, schizophrenia, borderline personality disorder, bipolar disorder and other psychological difficulties. I also work with people who may not have a specific diagnosis but are struggling with relationships, life circumstances, emotional wellbeing or personal concerns.</p>
+<p>Having worked with people from African, European and Middle Eastern cultural backgrounds, I value cultural understanding as an important part of effective therapeutic work.</p>
+</div>
+<aside class="quote"><p>“Every person brings a unique story, context and set of strengths into therapy.”</p><small>— Dr. Gloria Manyeruke</small></aside>
+</div></div></section>
+
+<section id="approach"><div class="section-inner">
+<div class="heading"><div class="eyebrow">My approach</div><h2>Therapy shaped around the person</h2><p>My practice combines structured psychological methods with attention to the whole person and their cultural context.</p></div>
+<div class="cards">
+<article class="card"><div class="num">01</div><h3>Integrative</h3><p>Different therapeutic perspectives and interventions can be thoughtfully combined to respond to the individual needs and goals of each client.</p></article>
+<article class="card"><div class="num">02</div><h3>Evidence-informed</h3><p>I value psychological approaches supported by research and continue to develop my knowledge through professional education and specialist training.</p></article>
+<article class="card"><div class="num">03</div><h3>Culturally responsive</h3><p>Culture, identity, relationships and life context matter. I aim to create a therapeutic space that is respectful, collaborative and culturally aware.</p></article>
+</div></div></section>
+
+<section class="soft" id="experience"><div class="section-inner">
+<div class="heading"><div class="eyebrow">Education & experience</div><h2>A foundation in psychology and counselling</h2></div>
+<div class="timeline">
+<div class="timeline-item"><div class="year">Education</div><h3>PhD in Psychological Counselling and Guidance</h3><p>Doctoral training in psychological counselling and guidance, following undergraduate and master's studies in Psychology.</p></div>
+<div class="timeline-item"><div class="year">Since 2017</div><h3>Counselling & psychotherapy practice</h3><p>Professional counselling work beginning at the Near East Counselling Centre.</p></div>
+<div class="timeline-item"><div class="year">Since 2020</div><h3>Face-to-face & online psychotherapy</h3><p>Providing psychotherapy services to clients both in person and through online sessions.</p></div>
+<div class="timeline-item"><div class="year">Professional development</div><h3>Specialist training</h3><p>Training in CBT for depression, anxiety, multiple traumas and personality disorders, alongside basic training in Positive Transcultural Psychotherapy. Candidate Beck Certified Clinician.</p></div>
+</div></div></section>
+
+<section id="research"><div class="section-inner">
+<div class="heading"><div class="eyebrow">Research interests</div><h2>Curiosity beyond the therapy room</h2><p>My academic interests explore how people adapt, flourish and experience wellbeing across changing personal and social contexts.</p></div>
+<div class="research">
+<div class="pill"><h3>Migration Psychology</h3><p>Psychological adaptation, identity, belonging and wellbeing in the context of migration and cultural transition.</p></div>
+<div class="pill"><h3>Positive Psychology & Wellbeing</h3><p>Strengths, resilience, positive functioning and factors that support psychological wellbeing.</p></div>
+<div class="pill"><h3>Developmental Psychology</h3><p>Psychological development and the ways experiences across the lifespan shape wellbeing and adaptation.</p></div>
+</div></div></section>
+
+<section class="contact" id="contact"><div class="section-inner"><img src="golden-chimera-logo.png" alt="Golden Chimera Counselling Centre" style="width:min(230px,65vw);height:auto;border-radius:22px;margin:0 auto 24px;display:block;">
+<div class="eyebrow" style="color:#e5b09f">Psychotherapy</div><h2>Take the next step</h2>
+<p>If you are considering psychotherapy and would like to learn more about working together, you are welcome to get in touch.</p>
+<div class="buttons" style="justify-content:center">
+<a class="btn btn-primary" href="https://wa.me/905338580094" target="_blank" rel="noopener">💬 Start on WhatsApp</a>
+<a class="btn btn-outline" href="mailto:drgloriapsy@gmail.com?subject=Psychotherapy%20Enquiry">✉ Write an email</a>
+</div>
+<div class="contact-details">
+<a href="https://wa.me/905338580094" target="_blank" rel="noopener">+90 533 858 0094</a>
+<a href="mailto:drgloriapsy@gmail.com">drgloriapsy@gmail.com</a>
+</div>
+</div></section>
+<footer>© 2026 Golden Chimera Counselling Centre · Dr. Gloria Manyeruke, Psychotherapist</footer>
+</body>
+</html>
