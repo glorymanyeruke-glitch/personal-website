@@ -1,0 +1,14 @@
+dist
+.output
+.netlify
+.tanstack
+coverage
+pnpm-lock.yaml
+src/routeTree.gen.ts
+src/styles/font-fallbacks.css
+docs
+.agents
+.claude
+skills-lock.json
+# Markdown is hand-formatted (wide spec tables); don't let Prettier reflow it.
+*.md

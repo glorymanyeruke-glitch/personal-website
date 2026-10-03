@@ -20,7 +20,18 @@ const colours = [
   ['rule', 'bg-rule'],
 ] as const
 
-const sizes = ['text-sm', 'text-ui', 'text-base', 'text-body', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl'] as const
+const sizes = [
+  'text-sm',
+  'text-ui',
+  'text-base',
+  'text-body',
+  'text-lg',
+  'text-xl',
+  'text-2xl',
+  'text-3xl',
+  'text-4xl',
+  'text-5xl',
+] as const
 
 function Home() {
   return (
