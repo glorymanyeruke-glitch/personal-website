@@ -1,0 +1,5 @@
+# esbuild and sharp come only from Netlify's local-dev emulation and ship prebuilt
+# binaries, so their install scripts aren't needed. Explicitly not allowed to run.
+allowBuilds:
+  esbuild: false
+  sharp: false
