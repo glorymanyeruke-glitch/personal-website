@@ -95,6 +95,11 @@
     }
   }
 
+  /* Anchored sections land below the 64px sticky header. */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
   body {
     background-color: var(--color-paper);
     color: var(--color-ink);
