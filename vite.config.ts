@@ -26,7 +26,9 @@ export default defineConfig({
       pages: [{ path: '/404', prerender: { enabled: true, outputPath: '/404.html' } }],
     }),
     // Builds the Netlify output (static files + one function for server functions).
-    netlify(),
+    // Edge-function and database emulation are off in dev: the site uses neither, and
+    // their local servers (Deno, embedded DB) fail on some machines and crash `pnpm dev`.
+    netlify({ dev: { edgeFunctions: { enabled: false }, database: { enabled: false } } }),
     // React's plugin must come after Start's.
     viteReact(),
   ],
