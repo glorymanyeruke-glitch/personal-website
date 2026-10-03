@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — reference.md §3.1 (colour), §3.2 (type), §3.3 (layout), §4.1 (motion).
+ * Tailwind's default scales are cleared first (`--x-*: initial`) so only these tokens
+ * exist: no stray palette colours, no `ease-in`, no pillowy radii.
+ */
+/* `static`: emit every token even if no utility uses it (motion + base CSS read them via var()). */
+@theme static {
+  /* Colour */
+  --color-*: initial;
+  --color-paper: #faf6ec;
+  --color-ink: #2a231b;
+  --color-muted: #6b6152;
+  --color-bronze: #7a4a12;
+  --color-bronze-deep: #5f3a0e; /* primary button hover only */
+  --color-gilt: #b8862b; /* decorative only — never text */
+  --color-myrtle: #2f4236;
+  --color-gilt-light: #e2b865; /* accent + focus ring on myrtle only */
+  --color-muted-on-dark: #d9d2c0;
+  --color-error: #8e2a1c;
+  --color-error-on-dark: #f4b4a2;
+  --color-rule: color-mix(in srgb, #b8862b 30%, transparent); /* gilt hairline */
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Type */
+  --font-*: initial;
+  --font-display: "Newsreader Variable", Georgia, serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* 1.25 scale (§3.2); `body` is the 17px reading size. */
+  --text-*: initial;
+  --text-sm: 0.8rem;
+  --text-sm--line-height: 1.45;
+  --text-ui: 0.9375rem;
+  --text-ui--line-height: 1.45;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.3;
+  --text-xl: 1.563rem;
+  --text-xl--line-height: 1.25;
+  --text-2xl: 1.953rem;
+  --text-2xl--line-height: 1.15;
+  --text-3xl: 2.441rem;
+  --text-3xl--line-height: 1.15;
+  --text-4xl: 3.052rem;
+  --text-4xl--line-height: 1.05;
+  --text-5xl: 3.815rem;
+  --text-5xl--line-height: 1.05;
+
+  /* Layout (§3.3) */
+  --container-content: 72rem;
+  --container-prose: 40rem;
+  --radius-*: initial;
+  --radius-portrait: 4px;
+  --radius-input: 6px;
+  --shadow-*: initial;
+  --shadow-portrait: 0 1px 2px rgb(42 35 27 / 0.06), 0 22px 44px -22px rgb(42 35 27 / 0.32);
+
+  /* Motion (§4.1). The only curves allowed. */
+  --ease-*: initial;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-press: 160ms;
+  --duration-small: 200ms;
+  --duration-swap: 240ms;
+  --duration-sheet: 320ms;
+  --duration-hero: 700ms;
+  --duration-arc: 1200ms;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Lets accordion panels animate to height:auto where supported. */
+    interpolate-size: allow-keywords;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus ring per context (Phase 0): bronze on paper, gilt-light on myrtle. */
+  :focus-visible {
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-gilt-light);
+  }
+}

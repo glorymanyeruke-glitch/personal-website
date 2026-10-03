@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
+import appCss from '~/styles/app.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -8,6 +9,7 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'Dr. Gloria Manyeruke — Psychotherapist' },
     ],
+    links: [{ rel: 'stylesheet', href: appCss }],
   }),
   component: RootComponent,
 })
