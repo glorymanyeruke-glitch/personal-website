@@ -4,6 +4,24 @@ import jsxA11y from 'eslint-plugin-jsx-a11y'
 import reactHooks from 'eslint-plugin-react-hooks'
 import tseslint from 'typescript-eslint'
 
+const viteEnvRule = {
+  selector:
+    "MemberExpression[object.type='MemberExpression'][object.property.name='env'][object.object.type='MetaProperty'][property.name=/^VITE_/][property.name!='VITE_TURNSTILE_SITE_KEY']",
+  message: 'Only VITE_TURNSTILE_SITE_KEY may be exposed to the browser (reference.md §8.1).',
+}
+
+const noHardcodedCopy = [
+  {
+    selector: 'JSXText[value=/[A-Za-z]/]',
+    message: 'Put copy in src/content/site.ts and read it from there.',
+  },
+  {
+    selector:
+      'JSXAttribute[name.name=/^(alt|aria-label|title|placeholder)$/] > Literal[value=/[A-Za-z]/]',
+    message: 'Put copy in src/content/site.ts and read it from there.',
+  },
+]
+
 export default tseslint.config(
   {
     ignores: [
@@ -44,16 +62,13 @@ export default tseslint.config(
       ],
       // Vite inlines every VITE_* value into the browser bundle. Only the Turnstile
       // site key is allowed to be public.
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector:
-            "MemberExpression[object.type='MemberExpression'][object.property.name='env'][object.object.type='MetaProperty'][property.name=/^VITE_/][property.name!='VITE_TURNSTILE_SITE_KEY']",
-          message:
-            'Only VITE_TURNSTILE_SITE_KEY may be exposed to the browser (reference.md §8.1).',
-        },
-      ],
+      'no-restricted-syntax': ['error', viteEnvRule],
     },
+  },
+  // All copy lives in src/content/site.ts (reference.md §6, task 2.1).
+  {
+    files: ['src/components/**/*.tsx', 'src/routes/**/*.tsx', 'src/features/**/*.tsx'],
+    rules: { 'no-restricted-syntax': ['error', viteEnvRule, ...noHardcodedCopy] },
   },
   {
     files: ['**/*.server.ts'],

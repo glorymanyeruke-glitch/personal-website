@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config'
 
 // Separate from vite.config.ts so tests don't boot the Start/Netlify plugins.
-// Scope: contact logic only (reference.md §10.1).
+// Scope: contact logic (reference.md §10.1), plus env parsing and the launch-blocker guard.
 export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
