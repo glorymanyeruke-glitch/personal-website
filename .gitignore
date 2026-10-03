@@ -10,3 +10,6 @@ coverage/
 .env.*
 !.env.example
 .DS_Store
+
+# Local review screenshots
+docs/review/
