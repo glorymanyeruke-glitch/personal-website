@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: N;
+        src: url('../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-italic.woff2');
+        font-style: italic;
+      }
+      @font-face {
+        font-family: N;
+        src: url('../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2');
+        font-style: normal;
+      }
+      @font-face {
+        font-family: I;
+        src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2');
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      .og {
+        width: 1200px;
+        height: 630px;
+        background: #faf6ec;
+        position: relative;
+        overflow: hidden;
+        font-family: I;
+      }
+      .arc {
+        position: absolute;
+        right: -90px;
+        top: 50%;
+        width: 640px;
+        height: 640px;
+        transform: translateY(-50%);
+      }
+      .emblem {
+        position: absolute;
+        right: 72px;
+        top: 50%;
+        width: 440px;
+        height: 440px;
+        transform: translateY(-50%);
+      }
+      .text {
+        position: absolute;
+        left: 88px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 600px;
+      }
+      .tag {
+        font: italic 400 76px/1.02 N;
+        color: #2a231b;
+        letter-spacing: -0.015em;
+        margin: 0;
+      }
+      .rule {
+        width: 64px;
+        height: 1px;
+        background: rgba(184, 134, 43, 0.6);
+        margin: 32px 0 26px;
+      }
+      .name {
+        font: 500 76px/1.04 N;
+        color: #7a4a12;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .intro {
+        font: 400 26px/1.45 I;
+        color: #2a231b;
+        margin: 0;
+        max-width: 520px;
+      }
+      .role {
+        font: 400 28px/1.4 I;
+        color: #6b6152;
+        margin: 14px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="og">
+      <img class="emblem" src="../src/assets/brand/logo-lockup-504.png" />
+      <div class="text">
+        <p class="name">Dr. Gloria<br />Manyeruke</p>
+        <p class="role">Psychotherapist</p>
+        <div class="rule"></div>
+        <p class="intro">Integrative, evidence-informed psychotherapy, face to face and online.</p>
+      </div>
+    </div>
+  </body>
+</html>
