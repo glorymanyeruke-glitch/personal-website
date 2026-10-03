@@ -1,4 +1,10 @@
 @import "tailwindcss";
+/* Self-hosted fonts (§3.2). Newsreader: opsz axis for optical size 72 at display sizes.
+   Inter: wght-only file (48 KB vs 73 KB with opsz). */
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/inter/wght.css";
+@import "./font-fallbacks.css";
 
 /*
  * Design tokens — reference.md §3.1 (colour), §3.2 (type), §3.3 (layout), §4.1 (motion).
@@ -26,8 +32,9 @@
 
   /* Type */
   --font-*: initial;
-  --font-display: "Newsreader Variable", Georgia, serif;
-  --font-sans: "Inter Variable", system-ui, sans-serif;
+  /* "fb" faces: size-adjusted local fallbacks (scripts/generate-font-fallbacks.mjs), so the swap causes no layout shift. */
+  --font-display: "Newsreader Variable", "Newsreader fb Georgia", "Newsreader fb Noto Serif", serif;
+  --font-sans: "Inter Variable", "Inter fb Arial", "Inter fb Roboto", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* 1.25 scale (§3.2); `body` is the 17px reading size. */
