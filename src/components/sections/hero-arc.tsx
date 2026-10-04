@@ -1,8 +1,8 @@
 /**
- * The gilt arc from the logo (§3.5), concentric with the circular portrait: its diameter is
- * 114% of the portrait's (a 7% ring of paper between photo and line). Open at the
- * lower-left like the logo (a 0.15-turn gap centred at 135°). Drawn statically here; the
- * draw-on animation arrives in Phase 4.
+ * The gilt ring from the logo (§3.5), concentric with the circular portrait: its diameter is
+ * 114% of the portrait's (a 7% ring of paper between photo and line). A complete circle
+ * (client decision 2026-10-04; it previously had the logo's lower-left opening). Drawn
+ * statically here; the draw-on animation arrives in Phase 4.
  *
  * Geometry: r=48 in a 100-unit box → the arc's diameter is 96% of the SVG, so the SVG is
  * 114 / 0.96 = 118.75% of the portrait's width.
@@ -25,7 +25,6 @@ export function HeroArc() {
         className="stroke-gilt"
         // ≈1.25px at desktop size, ≈1px on mobile (scales with the SVG).
         strokeWidth={0.34}
-        strokeDasharray="0.85 1"
       />
     </svg>
   )

@@ -579,3 +579,4 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 | 2026-10-03 | **Client decision:** header shows the whole logo in a 48px circle with a hairline border (as on the earlier Netlify site), replacing the lion-head crop. Favicons keep the lion head. |
 | 2026-10-04 | **Client decision:** WhatsApp removed everywhere (hero button, contact block and number, form reply option, thank-you link). Channels are now the contact form and the email address with Copy; "Send a message" is the hero's single primary button. `simple-icons` uninstalled. |
 | 2026-10-04 | Education history added to the timeline (BSc 2010–2013 University of Zimbabwe; MSc 2014–2016 and PhD 2016–2020 Near East University); Assistant Professor at Near East University since 2023. |
+| 2026-10-04 | **Client decision:** the gilt ring around the portrait is a complete circle (no lower-left opening). |
