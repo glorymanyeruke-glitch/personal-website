@@ -123,10 +123,21 @@ interface ExperienceEntry {
 
 // Typed list (not `as const`) so optional fields stay optional for the component.
 const experienceEntries: ExperienceEntry[] = [
+  // Education supplied 2026-10-04. Ordered by start year.
   {
-    when: 'Education',
-    title: 'Psychology studies and a PhD in Psychological Counselling and Guidance',
-    body: 'Undergraduate and master’s studies in Psychology, followed by doctoral training in psychological counselling and guidance.',
+    when: '2010–2013',
+    title: 'BSc (Hons) in Psychology',
+    body: 'University of Zimbabwe',
+  },
+  {
+    when: '2014–2016',
+    title: 'MSc General Psychology',
+    body: 'Near East University',
+  },
+  {
+    when: '2016–2020',
+    title: 'PhD Psychological Counselling and Guidance',
+    body: 'Near East University',
   },
   {
     when: 'Since 2017',
