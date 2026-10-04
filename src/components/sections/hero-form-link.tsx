@@ -11,7 +11,7 @@ export function HeroFormLink() {
     scrollToSection(contactSection.formId, document.getElementById(contactFieldIds.name))
   }
   return (
-    <ButtonLink href={`#${contactSection.formId}`} variant="secondary" onClick={onClick}>
+    <ButtonLink href={`#${contactSection.formId}`} variant="primary" onClick={onClick}>
       {hero.formCta}
     </ButtonLink>
   )

@@ -30,7 +30,7 @@
 
 - **Client:** Dr. Gloria Manyeruke, PhD — psychotherapist. Practice brand: **Golden Chimera Counselling Centre**. Tagline (from the logo): *"In flow, flourish, becoming more."*
 - **Audience:** Adults considering therapy — often anxious, hesitant, reading on a phone, possibly late at night. Also referrers and peers checking credentials. Clients come from African, European and Middle Eastern backgrounds.
-- **Primary job of the site:** Help a hesitant person feel safe enough to **make first contact** (WhatsApp, email, or the contact form).
+- **Primary job of the site:** Help a hesitant person feel safe enough to **make first contact** (the contact form or email; WhatsApp removed 2026-10-04).
 - **Secondary job:** Establish credibility (PhD, CBT training, Beck candidacy, experience since 2017).
 - **Tone:** Calm, warm, plain-spoken, professional. Never salesy. No hype words ("transform your life", "unlock", "journey" overuse).
 - **Non-goals:** No blog, no booking engine, no payments, no CMS, no client portal (v1).
@@ -41,7 +41,7 @@
 
 The provided `index.html` is a **content and structure reference only**. Do **not** port its styling.
 
-**Keep:** All factual copy — bio, years, training, research interests, contact details (WhatsApp `+90 533 858 0094`, email `drgloriapsy@gmail.com`). The old `mailto:` links are replaced by the contact form plus a visible email address with a Copy button (§7.1).
+**Keep:** All factual copy — bio, years, training, research interests, contact details (email `drgloriapsy@gmail.com`; the WhatsApp number is no longer shown — client decision 2026-10-04). The old `mailto:` links are replaced by the contact form plus a visible email address with a Copy button (§7.1).
 
 **Discard (these are the exact patterns that make it read as AI-generated):**
 
@@ -51,7 +51,7 @@ The provided `index.html` is a **content and structure reference only**. Do **no
 | Uppercase tracked eyebrow above every heading | Template chrome | Headings stand alone; one quiet label only where it adds information |
 | `01 / 02 / 03` on the approach cards | Numbering implies sequence; these three are principles, not steps | Prose columns, no numbers |
 | Three identical rounded cards with the same shadow | "SaaS card kit" | Typographic layout, rules, whitespace |
-| Emoji in buttons (💬 ✉) | Unprofessional on a clinical site | Proper SVG icons (WhatsApp mark from `simple-icons`, mail from `lucide-react`) |
+| Emoji in buttons (💬 ✉) | Unprofessional on a clinical site | Proper SVG icons from `lucide-react` |
 | "Space to heal. Room to grow." | Generic; could be any therapist | Her own tagline as the hero line (§3.4) |
 | Logo `src="golden-chimera-logo.png"` (file is `logo.jpeg`) | Broken reference | Full logo in a 48px circular badge in the nav (client decision 2026-10-03); lion-head crop for favicons; full lockup in the footer |
 
@@ -118,7 +118,7 @@ Rules:
 │                              └──────────┘     │
 │  h1: Dr. Gloria Manyeruke / Psychotherapist   │
 │  1–2 sentence intro                           │
-│  [Message on WhatsApp]  [Send a message]      │
+│  [Send a message]                             │
 ├───────────────────────────────────────────────┤
 │ ABOUT — bio prose (left) + pull quote (right)  │
 ├───────────────────────────────────────────────┤
@@ -136,7 +136,7 @@ Rules:
 │ QUESTIONS — accordion FAQ (content from §14)   │
 ├───────────────────────────────────────────────┤
 │ CONTACT (myrtle band)                          │
-│  Left: WhatsApp, email + Copy, crisis note     │
+│  Left: email + Copy, crisis note               │
 │  Right: contact form                           │
 ├───────────────────────────────────────────────┤
 │ FOOTER — full logo lockup, © , Privacy         │
@@ -151,7 +151,7 @@ Spend boldness in exactly one place: **the hero**. The tagline set large in News
 
 ### 3.6 Copy rules
 
-- Write from the client's side: "Message on WhatsApp", not "Connect". Button labels describe exactly what happens.
+- Write from the client's side: "Send a message", not "Connect". Button labels describe exactly what happens.
 - Keep Gloria's own sentences where possible; tighten, never embellish. **Never invent credentials, statistics, testimonials, client counts or outcomes.** (Testimonials are also discouraged by most psychotherapy ethics codes.)
 - Diagnoses list → plain language ("Anxiety and worry", "Low mood and depression", "Trauma and PTSD", "Bipolar disorder", "Schizophrenia", "Borderline personality disorder", "Relationships and life transitions").
 - Error messages: say what happened and how to fix it. Never apologise, never vague.
@@ -237,7 +237,7 @@ Verify current versions with `npm view <pkg> version` at setup and **pin exact v
 | Email delivery | **Resend** (`resend` SDK) — called **only** from the server function | |
 | Spam | **Cloudflare Turnstile** (works on any host) + honeypot + minimum fill time | |
 | Rate limiting | **Upstash Redis** + `@upstash/ratelimit` (free tier) | Hosting is Netlify, so no platform-native limiter |
-| Icons | `lucide-react`, `simple-icons` (WhatsApp mark only) | |
+| Icons | `lucide-react` | (`simple-icons` removed with WhatsApp, 2026-10-04) |
 | Fonts | Fontsource variable packages | §3.2 |
 | Images | `vite-imagetools` → AVIF + WebP, responsive `srcset` | |
 | Tests | **Vitest** + MSW (contact logic only) | §10. No Playwright — manual QA covers the UI |
@@ -299,7 +299,7 @@ Separation rules:
 
 ### 7.1 Channels (in priority order on the page)
 
-1. **WhatsApp** — `https://wa.me/905338580094?text=<urlencoded prefill>` with prefill "Hello Dr. Manyeruke, I'd like to ask about psychotherapy sessions." (no personal data in the URL).
+1. ~~**WhatsApp**~~ — removed (client decision 2026-10-04). The form and the email address are the only channels.
 2. **Contact form** — replaces the old `mailto:` link, which fails silently for people who use webmail without a mail app configured. The hero's second button is "Send a message" and scrolls to the form (moving focus to the first field).
 3. **Email address shown as text** with a **Copy** button (for people who prefer their own inbox). No `mailto:` link. The button label changes to "Copied" for 2s, announced via a polite live region. Uses `navigator.clipboard.writeText`; if unavailable, select the text so the user can copy manually.
 
@@ -310,7 +310,7 @@ Separation rules:
 | `name` | text | 1–80 chars, trimmed | `autocomplete="name"` |
 | `email` | email | valid email, ≤ 254 | `autocomplete="email"`, required |
 | `phone` | tel | optional, ≤ 20, digits/spaces/`+()-` only | `autocomplete="tel"` |
-| `preferredContact` | radio | `email` \| `whatsapp` \| `phone` | default `email`; if `whatsapp`/`phone`, phone becomes required |
+| `preferredContact` | radio | `email` \| `phone` | default `email`; if `phone`, phone becomes required (WhatsApp option removed 2026-10-04) |
 | `sessionType` | radio | `online` \| `in-person` \| `not-sure` | |
 | `message` | textarea | 10–1000 chars | Helper text: "A short note is enough. Please don't include detailed health information here — we can talk about that privately." Live character count. |
 | `consent` | checkbox | must be true | "I agree to my details being used to reply to this enquiry, as described in the [privacy notice]." |
@@ -340,14 +340,14 @@ browser submit
       7. return discriminated union: { ok: true } | { ok: false, code, message, requestId }
 ```
 
-Error codes: `VALIDATION`, `RATE_LIMITED`, `VERIFICATION_FAILED`, `SEND_FAILED`. Messages shown to the user say what happened and what to do (e.g. "Your message couldn't be sent. Please try again, or message Gloria on WhatsApp.").
+Error codes: `VALIDATION`, `RATE_LIMITED`, `VERIFICATION_FAILED`, `SEND_FAILED`. Messages shown to the user say what happened and what to do (e.g. "Your message couldn't be sent. Please try again, or email Gloria directly.").
 
 - Messages are **not stored** anywhere. The email in Gloria's inbox is the record.
 - Optional (ask Gloria): auto-acknowledgement email to the sender. Default **off** (avoids sending therapy-related email to an address that may be shared).
 
 ### 7.4 UX states
 
-`idle → validating → submitting → success | error`. Errors appear inline under fields (`aria-describedby`, `aria-invalid`); focus moves to the first invalid field. Server errors render in a polite live region above the button with a recovery action ("Try again" or "Message on WhatsApp instead"). The submit button is disabled while submitting (prevents double sends). Success replaces the form with: "Thank you, your message has been sent. Gloria usually replies within [PLACEHOLDER: reply time]." plus the WhatsApp link. Turnstile resets after any failed attempt.
+`idle → validating → submitting → success | error`. Errors appear inline under fields (`aria-describedby`, `aria-invalid`); focus moves to the first invalid field. Server errors render in a polite live region above the button with a recovery action ("Try again" or "Email Gloria instead", with the address and Copy button). The submit button is disabled while submitting (prevents double sends). Success replaces the form with: "Thank you, your message has been sent. Gloria usually replies within [PLACEHOLDER: reply time]." Turnstile resets after any failed attempt.
 
 ---
 
@@ -409,7 +409,7 @@ Scope is deliberately small: automated tests only where there is real logic (the
 
 | Layer | Must cover |
 | --- | --- |
-| Unit — `schema.ts` | Valid input; each invalid branch; boundary lengths (0, 1, max, max+1); unicode names (e.g. "Nkéchi", "Gözde"); phone required when contact method is WhatsApp/phone; CR/LF and `<script>` strings |
+| Unit — `schema.ts` | Valid input; each invalid branch; boundary lengths (0, 1, max, max+1); unicode names (e.g. "Nkéchi", "Gözde"); phone required when contact method is phone; CR/LF and `<script>` strings |
 | Unit — escaping/template | Every user value is escaped in HTML; header values have CR/LF stripped |
 | Unit — spam | Honeypot filled → silent success; < 3s → silent success; rate-limit exceeded → `RATE_LIMITED`; Upstash error → request allowed |
 | Integration — handler (MSW mocks Resend, Turnstile, Upstash) | Success path; Turnstile rejects; Turnstile timeout; Resend 5xx then success on retry; Resend timeout → `SEND_FAILED`; assert captured logs contain **no** name/email/phone/message |
@@ -424,7 +424,7 @@ Target: 90% line coverage on `features/contact/**`. Run with `pnpm test`.
 - [ ] Screen reader pass: VoiceOver (iPhone) and TalkBack (Android) on the form — labels, errors, success message announced.
 - [ ] Real devices: an iPhone (Safari) and a mid-range Android (Chrome). Widths 320, 360, 390, 768, 1024, 1280, 1536 in DevTools.
 - [ ] Reduced motion on (OS setting): hero appears without movement or blur; no smooth scrolling.
-- [ ] Form: real submission arrives in Gloria's inbox with correct Reply-To; WhatsApp link opens with the prefill; copy button works on iOS Safari.
+- [ ] Form: real submission arrives in Gloria's inbox with correct Reply-To; copy button works on iOS Safari.
 - [ ] Secret leak check from §8.1.
 
 ---
@@ -492,7 +492,7 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 - 2.1 `content/site.ts` with all copy from the legacy file, rewritten per §3.6. ✅ No copy hardcoded in components.
 - 2.2 `ui/` primitives: Button (cva: primary, secondary, on-dark), Field, Input, Textarea, CopyButton, Icon.
 - 2.3 SiteHeader + MobileMenu (Base UI Dialog), SiteFooter.
-- 2.4 Sections in order: Hero, About, Approach, HelpWith, Experience, Research, Faq (Base UI Accordion), Contact (static layout: WhatsApp, email + copy, form fields without submission).
+- 2.4 Sections in order: Hero, About, Approach, HelpWith, Experience, Research, Faq (Base UI Accordion), Contact (static layout: email + copy, form fields without submission).
 - 2.5 Emblem crop of logo for nav/favicon (SVG preferred; if raster, transparent PNG at 2×/3×). Favicon set + `og.jpg`.
 - 2.6 Portrait pipeline with placeholder until the real image is dropped in `src/assets/portrait.jpg`.
 - ✅ Manual QA items for layout, keyboard and axe (§10.2) pass on the deploy preview.
@@ -577,3 +577,5 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 | 2026-10-03 | Component files use kebab-case (`contact-form.tsx`), not the PascalCase names in §6's tree; components themselves are PascalCase. |
 | 2026-10-03 | Pull quote confirmed as Gloria's own words; placeholder removed. |
 | 2026-10-03 | **Client decision:** header shows the whole logo in a 48px circle with a hairline border (as on the earlier Netlify site), replacing the lion-head crop. Favicons keep the lion head. |
+| 2026-10-04 | **Client decision:** WhatsApp removed everywhere (hero button, contact block and number, form reply option, thank-you link). Channels are now the contact form and the email address with Copy; "Send a message" is the hero's single primary button. `simple-icons` uninstalled. |
+| 2026-10-04 | Education history added to the timeline (BSc 2010–2013 University of Zimbabwe; MSc 2014–2016 and PhD 2016–2020 Near East University); Assistant Professor at Near East University since 2023. |

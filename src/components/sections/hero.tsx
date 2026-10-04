@@ -1,8 +1,6 @@
 // Square crop so the portrait can be a true circle; centred, her face sits at the middle.
 import portrait from '~/assets/portrait.jpg?w=480;768;900&aspect=1:1&format=avif;webp;jpg&as=picture'
-import { contact, hero, person } from '~/content/site'
-import { ButtonLink } from '../ui/button'
-import { WhatsAppIcon } from '../ui/icons'
+import { hero, person } from '~/content/site'
 import { Picture } from '../ui/picture'
 import { HeroArc } from './hero-arc'
 import { HeroFormLink } from './hero-form-link'
@@ -35,10 +33,6 @@ export function Hero() {
           <p className="mt-1.5 text-base text-muted">{person.role}</p>
           <p className="mt-5 max-w-[34rem]">{hero.intro}</p>
           <div className="mt-8 flex flex-col gap-3 md:flex-row md:flex-wrap">
-            <ButtonLink href={contact.whatsapp.href} target="_blank" rel="noopener noreferrer">
-              <WhatsAppIcon />
-              {hero.whatsappCta}
-            </ButtonLink>
             <HeroFormLink />
           </div>
         </div>

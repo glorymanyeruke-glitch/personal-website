@@ -5,9 +5,6 @@ import { ph, type Copy } from './placeholder'
  * never hardcode text. Source: Gloria's legacy page, tightened per §3.6 — nothing added.
  */
 
-const whatsappNumber = '905338580094'
-const whatsappPrefill = 'Hello Dr. Manyeruke, I’d like to ask about psychotherapy sessions.'
-
 export const person = {
   name: 'Dr. Gloria Manyeruke',
   firstName: 'Gloria',
@@ -22,13 +19,8 @@ export const person = {
   ),
 } as const
 
+// Channels: the contact form and the email address (WhatsApp removed, client decision 2026-10-04).
 export const contact = {
-  whatsapp: {
-    display: '+90 533 858 0094',
-    // No personal data in the URL — only a fixed, polite opener (§7.1).
-    href: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappPrefill)}`,
-    plainHref: `https://wa.me/${whatsappNumber}`,
-  },
   email: 'drgloriapsy@gmail.com',
 } as const
 
@@ -58,7 +50,6 @@ export const nav = {
 export const hero = {
   intro:
     'I offer integrative, evidence-informed psychotherapy with a culturally responsive approach, face to face and online.',
-  whatsappCta: 'Message on WhatsApp',
   formCta: 'Send a message',
   portraitAlt: 'Dr. Gloria Manyeruke, smiling, wearing a dark blazer over a striped shirt',
 } as const
@@ -226,7 +217,6 @@ export const contactSection = {
   heading: 'Getting in touch',
   intro:
     'If you’re considering therapy and would like to ask about working together, you’re welcome to get in touch. A short message is enough.',
-  whatsapp: { label: 'Usually the quickest way', cta: 'Message on WhatsApp' },
   email: {
     label: 'Prefer your own inbox?',
     copy: 'Copy',
@@ -252,7 +242,6 @@ export const contactSection = {
       legend: 'How should Gloria reply?',
       options: [
         { value: 'email', label: 'Email' },
-        { value: 'whatsapp', label: 'WhatsApp' },
         { value: 'phone', label: 'Phone call' },
       ],
     },
@@ -282,8 +271,7 @@ export const contactSection = {
     heading: 'Thank you, your message has been sent.',
     replyBefore: 'Gloria usually replies within',
     replyTime: ph('reply-time', 'Typical reply time for enquiries (§14.7).'),
-    replyAfter: '. If it’s easier, you can also message her on WhatsApp.',
-    cta: 'Message on WhatsApp',
+    replyAfter: '.',
   },
 } as const
 
