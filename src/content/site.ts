@@ -178,30 +178,32 @@ export const research = {
 export const faq = {
   id: 'questions',
   heading: 'Questions you might have',
-  // Answers only Gloria can give (§14.11). If unanswered at launch, hide the section.
+  // Answers are Gloria's own words (supplied 2026-10-04), lightly tidied: spelling,
+  // one missing word, a semicolon before “however”, en dashes in ranges. Nothing added.
   items: [
     {
       question: 'What happens in the first session?',
-      answer: ph('faq-first-session', 'What happens in the first session?'),
+      answer:
+        'The first session is mainly about getting to know you, your situation and your concerns. This includes the history of the problem and relevant family history. We also set goals that help us to measure progress. We want to identify what strengths and resources help you to function now and then we begin to strategize how to meet our goals.',
     },
     {
       question: 'Is what I say confidential?',
-      answer: ph('faq-confidentiality', 'Confidentiality and its limits.'),
+      answer:
+        'Everything that we talk about is held in confidence. It cannot be shared with anyone without your permission.',
     },
     {
       question: 'Do you offer sessions online or in person?',
-      answer: ph('faq-location', 'In-person location and online platform (§14.2).'),
+      answer: 'Sessions can be held in person or online.',
     },
     {
       question: 'How many sessions will I need?',
-      answer: ph('faq-session-count', 'Typical number of sessions.'),
+      answer:
+        'We aim to complete treatment in 10–12 sessions; however, this may differ from person to person.',
     },
     {
-      question: 'How long are sessions, and what do they cost?',
-      answer: ph(
-        'faq-fees',
-        'Session length, fees, and whether a free initial call is offered (§14.3).',
-      ),
+      // Fees aren't answered yet, so the question asks only what the answer covers.
+      question: 'How long are sessions?',
+      answer: 'Sessions are typically between 45–60 minutes.',
     },
   ] satisfies { question: string; answer: Copy }[],
 } as const
