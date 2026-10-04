@@ -22,15 +22,17 @@ export function Experience() {
               ) : null}
             </p>
             <h3 className="mb-2 font-display text-lg font-medium text-bronze">{entry.title}</h3>
-            <p>
-              {entry.body}
-              {entry.bodyNote ? (
-                <>
-                  {' '}
-                  <ContentText value={entry.bodyNote} />
-                </>
-              ) : null}
-            </p>
+            {entry.body || entry.bodyNote ? (
+              <p>
+                {entry.body}
+                {entry.bodyNote ? (
+                  <>
+                    {' '}
+                    <ContentText value={entry.bodyNote} />
+                  </>
+                ) : null}
+              </p>
+            ) : null}
           </li>
         ))}
       </ol>

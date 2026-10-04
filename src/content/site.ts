@@ -117,43 +117,44 @@ interface ExperienceEntry {
   when: Copy
   whenNote?: Copy
   title: string
-  body: string
+  body?: string
   bodyNote?: Copy
 }
+
+// Typed list (not `as const`) so optional fields stay optional for the component.
+const experienceEntries: ExperienceEntry[] = [
+  {
+    when: 'Education',
+    title: 'Psychology studies and a PhD in Psychological Counselling and Guidance',
+    body: 'Undergraduate and master’s studies in Psychology, followed by doctoral training in psychological counselling and guidance.',
+  },
+  {
+    when: 'Since 2017',
+    title: 'Counselling practice',
+    body: 'Professional counselling work, beginning at the Near East Counselling Centre.',
+  },
+  {
+    when: 'Since 2020',
+    title: 'Psychotherapy, face to face and online',
+    body: 'Providing psychotherapy to clients in person and through online sessions.',
+  },
+  {
+    // Supplied 2026-10-04 ("Assist. Prof. 2023 (Near East University)"). No description given.
+    when: 'Since 2023',
+    title: 'Assistant Professor, Near East University',
+  },
+  {
+    when: 'Professional development',
+    title: 'Specialist training',
+    // Beck candidacy confirmed current (2026-10-04).
+    body: 'CBT for depression, anxiety, multiple traumas and personality disorders; basic training in Positive Transcultural Psychotherapy. Candidate Beck Certified Clinician.',
+  },
+]
 
 export const experience = {
   id: 'experience',
   heading: 'Education and experience',
-  entries: [
-    {
-      when: ph('education-years', 'Years and institutions for her psychology degrees and PhD.'),
-      title: 'Psychology studies and a PhD in Psychological Counselling and Guidance',
-      body: 'Undergraduate and master’s studies in Psychology, followed by doctoral training in psychological counselling and guidance.',
-    },
-    {
-      when: 'Since 2017',
-      title: 'Counselling practice',
-      body: 'Professional counselling work, beginning at the Near East Counselling Centre.',
-    },
-    {
-      when: 'Since 2020',
-      title: 'Psychotherapy, face to face and online',
-      body: 'Providing psychotherapy to clients in person and through online sessions.',
-    },
-    {
-      when: 'Professional development',
-      whenNote: ph(
-        'training-years',
-        'Years of her specialist CBT and Positive Psychotherapy training.',
-      ),
-      title: 'Specialist training',
-      body: 'CBT for depression, anxiety, multiple traumas and personality disorders; basic training in Positive Transcultural Psychotherapy. Candidate Beck Certified Clinician.',
-      bodyNote: ph(
-        'beck-status',
-        'Is “Candidate Beck Certified Clinician” still her current status?',
-      ),
-    },
-  ] satisfies ExperienceEntry[],
+  entries: experienceEntries,
 } as const
 
 export const research = {
