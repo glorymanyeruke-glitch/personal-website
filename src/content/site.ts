@@ -27,7 +27,7 @@ export const contact = {
 export const seo = {
   title: 'Dr. Gloria Manyeruke — Psychotherapist',
   description:
-    'Dr. Gloria Manyeruke offers integrative, evidence-informed and culturally responsive psychotherapy, face to face and online.',
+    'Dr. Gloria Manyeruke offers integrative, evidence-based and culturally responsive psychotherapy, face-to-face and online.',
 } as const
 
 export const ui = {
@@ -84,7 +84,7 @@ export const approach = {
       body: 'Different therapeutic perspectives and interventions can be combined to respond to each person’s needs and goals.',
     },
     {
-      title: 'Evidence-informed',
+      title: 'Evidence-based',
       body: 'I value approaches supported by research, and keep developing my knowledge through professional education and specialist training.',
     },
     {
