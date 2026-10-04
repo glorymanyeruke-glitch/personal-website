@@ -48,8 +48,9 @@ export const nav = {
 } as const
 
 export const hero = {
+  // Gloria's wording (2026-10-04).
   intro:
-    'I offer integrative, evidence-informed psychotherapy with a culturally responsive approach, face to face and online.',
+    'I offer integrative, evidence-based psychotherapy with a culturally responsive approach, face-to-face and online.',
   formCta: 'Send a message',
   portraitAlt: 'Dr. Gloria Manyeruke, smiling, wearing a dark blazer over a striped shirt',
 } as const
@@ -71,7 +72,11 @@ export const about = {
 export const approach = {
   id: 'approach',
   heading: 'How I work',
-  lede: 'Structured psychological methods, with attention to the whole person and their cultural context.',
+  // Gloria's own words (2026-10-04), as written apart from a doubled space.
+  intro: [
+    'My work brings together Cognitive Behavioral Therapy and Positive Transcultural Psychotherapy incorporating techniques to support people through psychological difficulties, relationships, life transitions and personal growth.',
+    'I would describe my practice as empathetic, open-minded, and flexible. I aim to be constantly learning in and out of the session. Respect and ethical conduct are at the center of my work.',
+  ],
   // Principles, not steps — deliberately unnumbered (§2).
   principles: [
     {
