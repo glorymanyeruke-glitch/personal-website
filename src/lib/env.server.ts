@@ -13,10 +13,6 @@ const serverEnvSchema = z.object({
   // Must be an address on the Resend-verified domain.
   CONTACT_FROM_EMAIL: z.email(),
   TURNSTILE_SECRET_KEY: z.string().min(1),
-  UPSTASH_REDIS_REST_URL: z.url({ protocol: /^https$/ }),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
-  // Salts the IP hash used as the rate-limit key; long enough to resist brute force.
-  RATE_LIMIT_SALT: z.string().min(32, 'must be at least 32 characters'),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>

@@ -1,10 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ContentText } from '~/components/ui/content-text'
 import { privacy, seo } from '~/content/site'
+import { pageHead } from '~/lib/seo'
 
 // Privacy notice (§8.3). Content comes from Gloria only — never written by us (Phase 5.3).
 export const Route = createFileRoute('/privacy')({
-  head: () => ({ meta: [{ title: `${privacy.title} — ${seo.title}` }] }),
+  head: () =>
+    pageHead({
+      title: `${privacy.title} — ${seo.title}`,
+      description: seo.privacyDescription,
+      path: '/privacy',
+    }),
   component: PrivacyPage,
 })
 

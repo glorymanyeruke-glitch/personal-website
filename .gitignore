@@ -13,3 +13,9 @@ coverage/
 
 # Local review screenshots
 docs/review/
+.claude/
+.agents/
+
+# Generated from src/content/site-url.ts (scripts/generate-seo-files.mjs)
+public/robots.txt
+public/sitemap.xml

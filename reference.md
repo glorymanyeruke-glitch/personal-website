@@ -17,7 +17,7 @@
 | 7. Contact feature | Form + one server function (Zod, Turnstile, Resend) |
 | 8. Security & privacy | Headers, secrets, data handling for a therapy practice |
 | 9. Performance, SEO, a11y | Budgets and requirements |
-| 10. Testing | Vitest for contact logic + manual QA checklist |
+| 10. Verification | No automated tests; typecheck, lint, build and a manual QA checklist |
 | 11. Observability | Logging and monitoring |
 | 12. Deployment & DNS | Netlify hosting, Cloudflare DNS checklist |
 | 13. Phased task breakdown | Ordered tasks with acceptance criteria |
@@ -33,7 +33,7 @@
 - **Primary job of the site:** Help a hesitant person feel safe enough to **make first contact** (the contact form or email; WhatsApp removed 2026-10-04).
 - **Secondary job:** Establish credibility (PhD, CBT training, Beck candidacy, experience since 2017).
 - **Tone:** Calm, warm, plain-spoken, professional. Never salesy. No hype words ("transform your life", "unlock", "journey" overuse).
-- **Non-goals:** No blog, no booking engine, no payments, no CMS, no client portal (v1).
+- **Non-goals:** No blog, no booking engine, no payments, no CMS, no client portal (v1). **No backend:** this is a plain static website whose only server-side code is one small serverless function (a Netlify Function, nothing to host or maintain) that emails Gloria's enquiries via Resend. No database, no stored messages, no API.
 
 ---
 
@@ -236,16 +236,15 @@ Verify current versions with `npm view <pkg> version` at setup and **pin exact v
 | Form state | **TanStack Form** | Field-level validation with the Zod schema |
 | Email delivery | **Resend** (`resend` SDK) — called **only** from the server function | |
 | Spam | **Cloudflare Turnstile** (works on any host) + honeypot + minimum fill time | |
-| Rate limiting | **Upstash Redis** + `@upstash/ratelimit` (free tier) | Hosting is Netlify, so no platform-native limiter |
 | Icons | `lucide-react` | (`simple-icons` removed with WhatsApp, 2026-10-04) |
 | Fonts | Fontsource variable packages | §3.2 |
 | Images | `vite-imagetools` → AVIF + WebP, responsive `srcset` | |
-| Tests | **Vitest** + MSW (contact logic only) | §10. No Playwright — manual QA covers the UI |
+| Tests | **None** (decided 2026-10-12) | §10. The site is small; typecheck, lint, build and manual QA cover it. No Vitest, MSW or Playwright going forward |
 | Lint/format | ESLint 9 (jsx-a11y doesn't support 10) (typescript-eslint, jsx-a11y), Prettier + `prettier-plugin-tailwindcss` | |
 | Hosting | **Netlify** (official TanStack Start partner, free tier allows commercial use) | §12 |
 | DNS | Cloudflare (domain stays there; DNS only, no proxy) | §12 |
 
-Deliberately **not** used: databases, Playwright, Sentry, pino, analytics cookies. Add only if a real need appears.
+Deliberately **not** used: databases, automated tests (Vitest, MSW, Playwright), rate limiting (Upstash), Sentry, pino, analytics cookies. Add only if a real need appears.
 
 ---
 
@@ -272,9 +271,8 @@ Deliberately **not** used: databases, Playwright, Sentry, pino, analytics cookie
 │   │   ├── contact.functions.ts ← createServerFn wrapper (client imports this; Start swaps the body for an RPC stub)
 │   │   ├── contact.server.ts    ← handler logic called from the wrapper (server only)
 │   │   ├── send-email.server.ts ← Resend call + email template (plain text + escaped HTML)
-│   │   ├── spam.server.ts       ← Turnstile verify, honeypot, timing, Upstash rate limit
+│   │   ├── spam.server.ts       ← Turnstile verify, honeypot, minimum fill time
 │   │   ├── ContactForm.tsx      ← TanStack Form UI + Turnstile widget
-│   │   └── __tests__/
 │   ├── content/
 │   │   └── site.ts              ← ALL copy + contact details as typed constants (one place to edit)
 │   ├── lib/
@@ -290,7 +288,7 @@ Separation rules:
 - `components/sections/*` read from `content/site.ts`; they never hardcode copy.
 - **Secrets are only read in `*.server.ts` files**, and only through `env.server.ts` (`process.env`, never `import.meta.env`). Client code must never import a `*.server.ts` file.
 - `ui/` components have no business logic and no data fetching.
-- Pages are **prerendered** at build time; the contact server function is the only code that runs on request.
+- Pages are **prerendered** at build time; the contact server function is the only code that runs on request. There is no other server or backend (see §1).
 - TanStack Start's import protection fails the build if client code imports a `*.server.*` file, so the `createServerFn` wrapper lives in `contact.functions.ts` and calls the `*.server.ts` helpers inside its handler.
 
 ---
@@ -325,22 +323,18 @@ Persistent note above the form (not dismissible): *"This form is not monitored f
 ```
 browser submit
   → client-side Zod validation (instant field errors)
-  → createServerFn({ method: 'POST' }).inputValidator(contactSchema)   ← runs as a Netlify Function
+  → createServerFn({ method: 'POST' }).validator(…)   ← runs as a Netlify Function
       1. honeypot filled OR elapsed < 3s  → return { ok: true } silently (don't tip off bots)
-      2. rate limit: Upstash sliding window, 5 requests / hour per SHA-256(IP + RATE_LIMIT_SALT)
-         IP from Netlify's `x-nf-client-connection-ip` header.
-         Upstash unreachable → allow the request and log `contact.ratelimit_unavailable`
-         (fail open: Turnstile still protects; never block a real client because Redis is down)
-      3. verify Turnstile token: POST to https://challenges.cloudflare.com/turnstile/v0/siteverify
+      2. verify Turnstile token: POST to https://challenges.cloudflare.com/turnstile/v0/siteverify
          with TURNSTILE_SECRET_KEY (+ remoteip). Fail or timeout (5s) → error result
-      4. build email: plain text + HTML, every user value HTML-escaped;
+      3. build email: plain text + HTML, every user value HTML-escaped;
          Reply-To = validated sender email; strip CR/LF from every header-bound value
-      5. send via Resend with a 10s timeout, 1 retry on 5xx/network error
-      6. log metadata only (requestId, outcome, latencyMs) — NEVER name/email/phone/message
-      7. return discriminated union: { ok: true } | { ok: false, code, message, requestId }
+      4. send via Resend with a 10s timeout, 1 retry on 5xx/network error
+      5. log metadata only (requestId, outcome, latencyMs) — NEVER name/email/phone/message
+      6. return discriminated union: { ok: true } | { ok: false, code, message, requestId }
 ```
 
-Error codes: `VALIDATION`, `RATE_LIMITED`, `VERIFICATION_FAILED`, `SEND_FAILED`. Messages shown to the user say what happened and what to do (e.g. "Your message couldn't be sent. Please try again, or email Gloria directly.").
+Error codes: `VALIDATION`, `VERIFICATION_FAILED`, `SEND_FAILED`. Messages shown to the user say what happened and what to do (e.g. "Your message couldn't be sent. Please try again, or email Gloria directly.").
 
 - Messages are **not stored** anywhere. The email in Gloria's inbox is the record.
 - Optional (ask Gloria): auto-acknowledgement email to the sender. Default **off** (avoids sending therapy-related email to an address that may be shared).
@@ -364,13 +358,11 @@ This is a mental-health practice. Treat every enquiry as sensitive.
 | `RESEND_API_KEY` | `send-email.server.ts` | No |
 | `CONTACT_TO_EMAIL` | `send-email.server.ts` | No |
 | `CONTACT_FROM_EMAIL` | `send-email.server.ts` (must be on her verified domain) | No |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | `spam.server.ts` | No |
-| `RATE_LIMIT_SALT` | `spam.server.ts` | No |
 
 - **Only** `VITE_TURNSTILE_SITE_KEY` may carry the `VITE_` prefix. Vite inlines every `VITE_*` value into the browser bundle.
 - Secrets are read with `process.env` inside `*.server.ts` only, validated by Zod in `env.server.ts`.
 - Local development: `.env` (gitignored). Production: Netlify dashboard → Environment variables, marked as **secret**, scoped to Functions. `.env.example` lists names only.
-- **Post-deploy leak check:** on the live site, search DevTools → Sources for `re_` (Resend key prefix) and the Upstash token prefix; submit the form and confirm the Network tab only shows the request to your own server function. Any hit = launch blocker.
+- **Post-deploy leak check:** on the live site, search DevTools → Sources for `re_` (Resend key prefix); submit the form and confirm the Network tab only shows the request to your own server function. Any hit = launch blocker.
 
 ### 8.2 Headers (in `netlify.toml` `[[headers]]` for `/*`)
 
@@ -383,8 +375,8 @@ This is a mental-health practice. Treat every enquiry as sensitive.
 
 - Zod on both sides; length caps everywhere; HTML-escape before templating; strip CR/LF from header values.
 - No analytics cookies. If analytics are wanted later, use a cookieless tool (Plausible or Netlify Analytics) so no consent banner is needed.
-- IPs are hashed with a salt for rate limiting and expire with the rate-limit window; never logged raw.
-- **Data law:** clients may be covered by GDPR (EU) and KVKK (Turkey). The privacy notice must state: who the controller is, what's collected, purpose (reply only), processors (Netlify, Resend, Cloudflare Turnstile, Upstash), retention, rights, contact. **Content from Gloria — do not write legal text; draft a placeholder clearly marked DRAFT.**
+- The visitor's IP is passed to Turnstile for verification only; it is never stored or logged.
+- **Data law:** clients may be covered by GDPR (EU) and KVKK (Turkey). The privacy notice must state: who the controller is, what's collected, purpose (reply only), processors (Netlify, Resend, Cloudflare Turnstile), retention, rights, contact. **Content from Gloria — do not write legal text; draft a placeholder clearly marked DRAFT.**
 - `pnpm audit` before each release; Dependabot or Renovate weekly.
 
 ---
@@ -401,20 +393,9 @@ This is a mental-health practice. Treat every enquiry as sensitive.
 
 ---
 
-## 10. Testing
+## 10. Verification
 
-Scope is deliberately small: automated tests only where there is real logic (the contact flow). Everything visual is checked by hand.
-
-### 10.1 Automated (Vitest + MSW)
-
-| Layer | Must cover |
-| --- | --- |
-| Unit — `schema.ts` | Valid input; each invalid branch; boundary lengths (0, 1, max, max+1); unicode names (e.g. "Nkéchi", "Gözde"); phone required when contact method is phone; CR/LF and `<script>` strings |
-| Unit — escaping/template | Every user value is escaped in HTML; header values have CR/LF stripped |
-| Unit — spam | Honeypot filled → silent success; < 3s → silent success; rate-limit exceeded → `RATE_LIMITED`; Upstash error → request allowed |
-| Integration — handler (MSW mocks Resend, Turnstile, Upstash) | Success path; Turnstile rejects; Turnstile timeout; Resend 5xx then success on retry; Resend timeout → `SEND_FAILED`; assert captured logs contain **no** name/email/phone/message |
-
-Target: 90% line coverage on `features/contact/**`. Run with `pnpm test`.
+**No automated tests** (client decision 2026-10-12): the site is small and a test suite would be overkill. Do not add Vitest, MSW, coverage targets or test-first work. Correctness is checked with `pnpm typecheck`, `pnpm lint`, `pnpm build` and the manual checklist below. A few early tests (placeholders, SEO, env) remain in the repo; leave them alone and don't extend them.
 
 ### 10.2 Manual QA checklist (before every release)
 
@@ -426,13 +407,14 @@ Target: 90% line coverage on `features/contact/**`. Run with `pnpm test`.
 - [ ] Reduced motion on (OS setting): hero appears without movement or blur; no smooth scrolling.
 - [ ] Form: real submission arrives in Gloria's inbox with correct Reply-To; copy button works on iOS Safari.
 - [ ] Secret leak check from §8.1.
+- [ ] Contact form error paths tried by hand: each invalid field, phone required when "Phone call" is chosen, wrong Resend key (message + email fallback shown), Turnstile not completed.
 
 ---
 
 ## 11. Observability (kept lightweight)
 
 - `log.server.ts` writes one JSON line per event to `console` (visible in Netlify → Functions → Logs). Fields: `event`, `requestId`, `outcome`, `latencyMs`, `code`. **Never** any form field values.
-- Events: `contact.sent`, `contact.rejected` (reason code), `contact.send_failed` (Resend status), `contact.rate_limited`, `contact.ratelimit_unavailable`.
+- Events: `contact.sent`, `contact.rejected` (reason code), `contact.send_failed` (Resend status).
 - `requestId` is returned in error results so a failed submission reported by a visitor can be matched to a log line.
 - Delivery problems: check the Resend dashboard (bounces, failures). Turn on Resend's email notifications for failures to **your** address.
 - Uptime: a free monitor (e.g. UptimeRobot) on `/`, alerting you, not Gloria.
@@ -464,7 +446,7 @@ The domain stays on Cloudflare. Cloudflare acts only as DNS here.
 
 ### 12.3 CI (GitHub Actions, optional but recommended)
 
-`pnpm install --frozen-lockfile` → `pnpm typecheck` → `pnpm lint` → `pnpm test` → `pnpm build`. Netlify deploys on push; CI just blocks merging broken code.
+`pnpm install --frozen-lockfile` → `pnpm typecheck` → `pnpm lint` → `pnpm build`. Netlify deploys on push; CI just blocks merging broken code.
 
 ---
 
@@ -483,7 +465,7 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 - 1.1 Create TanStack Start app with pnpm, TypeScript strict. ✅ `pnpm dev` serves.
 - 1.2 Tailwind v4 via Vite plugin; `app.css` with all tokens from §3.1, §3.2, §4.1. ✅ Token swatch renders.
 - 1.3 Fontsource fonts, preload, fallback metrics. ✅ No layout shift on font swap.
-- 1.4 ESLint, Prettier, Vitest; `typecheck`, `lint`, `test` scripts. ✅ All pass on the empty app.
+- 1.4 ESLint, Prettier; `typecheck`, `lint` scripts. ✅ All pass on the empty app.
 - 1.5 `env.server.ts`, `log.server.ts`, `.env.example`. ✅ Server function fails with a clear message if env is missing.
 - 1.6 Netlify site connected to the repo; `netlify.toml`; first deploy preview live. ✅ Preview URL loads.
 - 1.7 Install Emil Kowalski's skills (`npx skills add emilkowalski/skill`). ✅ Skills present in the agent's skills directory.
@@ -498,14 +480,14 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 - ✅ Manual QA items for layout, keyboard and axe (§10.2) pass on the deploy preview.
 - ⛔ **Screenshot review (390px and 1280px).**
 
-### Phase 3 — Contact feature (tests first)
-- 3.1 Zod schema + unit tests.
-- 3.2 Email template + escaping + tests; `send-email.server.ts` with timeout and retry.
-- 3.3 Upstash database created; `spam.server.ts` (honeypot, timing, rate limit, Turnstile verify) + tests.
-- 3.4 Server function wiring all of the above + MSW integration tests, including the no-PII log assertion.
+### Phase 3 — Contact feature
+- 3.1 Zod schema.
+- 3.2 Email template + escaping; `send-email.server.ts` with timeout and retry.
+- 3.3 `spam.server.ts` (honeypot, minimum fill time, Turnstile verify).
+- 3.4 Server function wiring all of the above; logs carry no name/email/phone/message.
 - 3.5 ContactForm with TanStack Form, Turnstile widget, all UX states from §7.4 (motion deferred to Phase 4).
 - 3.6 On a deploy preview with test keys: submit end-to-end, trigger each error path, confirm logs.
-- ✅ `pnpm test` green; coverage target met; §8.1 leak check passes on the preview.
+- ✅ `pnpm typecheck`, `pnpm lint` and `pnpm build` pass; §8.1 leak check passes on the preview.
 
 ### Phase 4 — Motion
 - 4.1 Implement §4.2 items one at a time using the `animate` skill.
@@ -539,7 +521,7 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 10. High-resolution portrait (≥ 1600px on the long edge) and, ideally, a vector version of the logo emblem.
 11. FAQ answers: What happens in the first session? Is it confidential (and its limits)? Online vs in person? How many sessions?
 12. Auto-acknowledgement email to enquirers: yes or no?
-13. Who owns the Netlify, Resend, Upstash and Cloudflare accounts long-term (you or Gloria)? Ideally Gloria owns them and you're added as a collaborator.
+13. Who owns the Netlify, Resend and Cloudflare accounts long-term (you or Gloria)? Ideally Gloria owns them and you're added as a collaborator.
 
 ---
 
@@ -549,8 +531,8 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 - [ ] No pattern from the §2 discard table is present.
 - [ ] Every animation is listed in §4.2 and the `review-animations` verdict is Approve.
 - [ ] Lighthouse budgets met on mobile; axe zero issues; keyboard-only and screen-reader passes done (§10.2).
-- [ ] `pnpm test` green with coverage target met.
-- [ ] Contact form tested in production with a real email to Gloria; spam protections and rate limit confirmed.
+- [ ] `pnpm typecheck`, `pnpm lint` and `pnpm build` pass.
+- [ ] Contact form tested in production with a real email to Gloria; spam protections (Turnstile, honeypot, minimum fill time) confirmed.
 - [ ] Secret leak check (§8.1) passes on production; headers grade A+.
 - [ ] DNS checklist (§12.2) complete: website records grey-cloud, HTTPS forced, Resend domain verified, DMARC in place.
 - [ ] All §14 placeholders either filled by Gloria or listed in `LAUNCH_BLOCKERS.md`.
@@ -580,3 +562,7 @@ Each task ends with a check. Do not start a phase until the previous one passes.
 | 2026-10-04 | **Client decision:** WhatsApp removed everywhere (hero button, contact block and number, form reply option, thank-you link). Channels are now the contact form and the email address with Copy; "Send a message" is the hero's single primary button. `simple-icons` uninstalled. |
 | 2026-10-04 | Education history added to the timeline (BSc 2010–2013 University of Zimbabwe; MSc 2014–2016 and PhD 2016–2020 Near East University); Assistant Professor at Near East University since 2023. |
 | 2026-10-04 | **Client decision:** the gilt ring around the portrait is a complete circle (no lower-left opening). |
+| 2026-10-12 | **Client decision:** the "Prefer your own inbox?" email + Copy block and the "In an emergency" block are removed from the contact section; the form is the only visible channel (the form's own "not monitored for emergencies" note stays). The email is also omitted from JSON-LD. Supersedes §7.1 item 3 and §14.6 for now. |
+| 2026-10-12 | `netlify.toml` removed: deploys are done by hand from the Netlify dashboard, so build command (`pnpm build`), publish dir (`dist/client`) and `NODE_VERSION=24` are set in the dashboard. Security headers (§8.2) will go in `public/_headers` instead. |
+| 2026-10-12 | **Client decision:** no automated tests. The site is small; §10.1 (Vitest + MSW, 90% coverage) and the test steps in §13 and §15 are superseded. Verification is typecheck, lint, build and the manual QA in §10.2. Existing tests are left as they are. Upstash rate limiting is also dropped (§5, §7.3 step 2, §8.1); Turnstile, honeypot and minimum fill time remain. |
+| 2026-10-12 | **Client decision:** the site is a plain static website with no backend. The one serverless function (`contact.functions.ts` → Netlify Function) stays because the Resend key must be kept secret and Turnstile verified server-side; it stores nothing. Server-side env vars are only `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`. |

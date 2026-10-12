@@ -7,23 +7,31 @@ import { Faq } from '~/components/sections/faq'
 import { HelpWith } from '~/components/sections/help-with'
 import { Hero, heroPortrait, heroPortraitSizes } from '~/components/sections/hero'
 import { Research } from '~/components/sections/research'
+import { seo } from '~/content/site'
+import { homeJsonLd, jsonLdScript, pageHead } from '~/lib/seo'
 
 export const Route = createFileRoute('/')({
-  head: () => ({
-    links: [
-      // Desktop only: there the portrait is above the fold. On mobile it sits below the
-      // headline, so it isn't preloaded at high priority (§9, Phase 0 gap 5).
-      {
-        rel: 'preload',
-        as: 'image',
-        type: 'image/avif',
-        imageSrcSet: heroPortrait.sources.avif,
-        imageSizes: heroPortraitSizes,
-        media: '(min-width: 1024px)',
-        fetchPriority: 'high',
-      },
-    ],
-  }),
+  head: () => {
+    const page = pageHead({ title: seo.title, description: seo.description, path: '/' })
+    return {
+      meta: page.meta,
+      scripts: [jsonLdScript(homeJsonLd())],
+      links: [
+        ...page.links,
+        // Desktop only: there the portrait is above the fold. On mobile it sits below the
+        // headline, so it isn't preloaded at high priority (§9, Phase 0 gap 5).
+        {
+          rel: 'preload',
+          as: 'image',
+          type: 'image/avif',
+          imageSrcSet: heroPortrait.sources.avif,
+          imageSizes: heroPortraitSizes,
+          media: '(min-width: 1024px)',
+          fetchPriority: 'high',
+        },
+      ],
+    }
+  },
   component: Home,
 })
 

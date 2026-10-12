@@ -28,6 +28,19 @@ export const seo = {
   title: 'Dr. Gloria Manyeruke — Psychotherapist',
   description:
     'Dr. Gloria Manyeruke offers integrative, evidence-based and culturally responsive psychotherapy, face-to-face and online.',
+  siteName: 'Dr. Gloria Manyeruke — Golden Chimera Counselling Centre',
+  ogImage: {
+    path: '/og.jpg',
+    width: 1200,
+    height: 630,
+    alt: 'Dr. Gloria Manyeruke, Psychotherapist — Golden Chimera Counselling Centre',
+  },
+  privacyDescription: 'How your details are used when you contact Dr. Gloria Manyeruke.',
+  /**
+   * Profile URLs Gloria has confirmed (LinkedIn, a professional register, …), used for
+   * JSON-LD `sameAs`. Empty until she supplies them (LAUNCH_BLOCKERS.md, `profile-links`).
+   */
+  profiles: [] as string[],
 } as const
 
 export const ui = {
@@ -229,14 +242,6 @@ export const contactSection = {
     announceCopied: 'Email address copied.',
     announceSelected: 'Email address selected. Copy it with your device’s copy command.',
   },
-  emergency: {
-    lead: 'In an emergency,',
-    body: 'please don’t wait for a reply: contact your local emergency services.',
-    numbers: ph(
-      'emergency-numbers',
-      'Emergency numbers appropriate for her clients’ regions (§14.6).',
-    ),
-  },
   formNote:
     'This form is not monitored for emergencies. If you or someone else is in immediate danger, contact your local emergency services.',
   form: {
@@ -270,7 +275,19 @@ export const contactSection = {
       after: '.',
     },
     submit: 'Send message',
-    turnstilePending: 'Spam check loads here',
+    submitting: 'Sending…',
+    characters: 'characters',
+    spamCheckLabel: 'Spam check',
+  },
+  errors: {
+    // Shown above the button after a failed attempt (§7.4). Say what happened and what to do.
+    VALIDATION: 'Some details need fixing. Check the fields marked below and send again.',
+    VERIFICATION_FAILED:
+      'The spam check didn’t pass, so your message wasn’t sent. Please try again.',
+    SEND_FAILED: 'Your message couldn’t be sent. Please try again, or email Gloria directly.',
+    spamCheckPending: 'The spam check is still loading. Wait a moment, then send again.',
+    reference: 'Reference:',
+    fallbackLead: 'You can also email Gloria directly:',
   },
   success: {
     heading: 'Thank you, your message has been sent.',

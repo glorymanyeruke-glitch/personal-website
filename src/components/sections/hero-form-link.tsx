@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react'
 import { contactSection, hero } from '~/content/site'
 import { scrollToSection } from '~/lib/scroll-to-section'
-import { contactFieldIds } from '~/features/contact/contact-form'
+import { contactFieldIds } from '~/features/contact/ids'
 import { ButtonLink } from '../ui/button'
 
 /** "Send a message": scrolls to the form and focuses its first field (§7.1). */

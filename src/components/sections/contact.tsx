@@ -1,13 +1,14 @@
-import { contact, contactSection } from '~/content/site'
-import { ContactForm } from '~/features/contact/contact-form'
-import { ContentText } from '../ui/content-text'
-import { CopyButton } from '../ui/copy-button'
+import { contactSection } from '~/content/site'
+import { lazy, Suspense } from 'react'
 
-const EMAIL_ID = 'contact-email-address'
+// The form pulls in TanStack Form and the Turnstile loader, so it ships as its own chunk (§9 JS budget).
+const ContactForm = lazy(() =>
+  import('~/features/contact/contact-form').then((m) => ({ default: m.ContactForm })),
+)
 
 /**
- * The one full-bleed colour band (§3.3). Channels (§7.1): the form, and the email address
- * with Copy (no mailto: — it fails silently for webmail users).
+ * The one full-bleed colour band (§3.3). The form is the only channel shown: the email
+ * address + Copy block and the emergency block were removed (client decision 2026-10-12).
  */
 export function Contact() {
   const s = contactSection
@@ -26,39 +27,15 @@ export function Contact() {
             {s.heading}
           </h2>
           <p className="-mt-2 mb-8 max-w-[30rem] text-muted-on-dark">{s.intro}</p>
-
-          <div className="border-y border-paper/16">
-            <div className="py-5">
-              <p className="mb-2 text-ui text-muted-on-dark">{s.email.label}</p>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-                <span id={EMAIL_ID} className="break-all text-paper select-all">
-                  {contact.email}
-                </span>
-                <CopyButton
-                  targetId={EMAIL_ID}
-                  text={contact.email}
-                  labels={{
-                    copy: s.email.copy,
-                    copied: s.email.copied,
-                    announceCopied: s.email.announceCopied,
-                    announceSelected: s.email.announceSelected,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-8 max-w-[30rem] border-l border-gilt-light pl-4 text-ui text-muted-on-dark">
-            <strong className="font-medium text-paper">{s.emergency.lead}</strong>{' '}
-            {s.emergency.body} <ContentText value={s.emergency.numbers} onDark />
-          </p>
         </div>
 
         <div id={s.formId} className="lg:col-span-6 lg:col-start-7">
           <p className="mb-7 rounded-input border border-paper/24 px-4 py-3.5 text-ui text-muted-on-dark">
             {s.formNote}
           </p>
-          <ContactForm />
+          <Suspense fallback={<div className="min-h-[40rem]" />}>
+            <ContactForm />
+          </Suspense>
         </div>
       </div>
     </section>

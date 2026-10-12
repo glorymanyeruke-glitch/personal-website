@@ -6,12 +6,7 @@
  * values (name, email, phone, message) can't end up in logs by accident.
  */
 export type LogEvent =
-  | 'contact.sent'
-  | 'contact.rejected'
-  | 'contact.send_failed'
-  | 'contact.rate_limited'
-  | 'contact.ratelimit_unavailable'
-  | 'contact.env_invalid'
+  'contact.sent' | 'contact.rejected' | 'contact.send_failed' | 'contact.env_invalid'
 
 export interface LogFields {
   requestId: string
@@ -28,8 +23,6 @@ type Level = 'info' | 'warn' | 'error'
 const levelFor: Record<LogEvent, Level> = {
   'contact.sent': 'info',
   'contact.rejected': 'info',
-  'contact.rate_limited': 'warn',
-  'contact.ratelimit_unavailable': 'warn',
   'contact.send_failed': 'error',
   'contact.env_invalid': 'error',
 }
