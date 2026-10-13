@@ -36,11 +36,11 @@ export const seo = {
     alt: 'Dr. Gloria Manyeruke, Psychotherapist — Golden Chimera Counselling Centre',
   },
   privacyDescription: 'How your details are used when you contact Dr. Gloria Manyeruke.',
-  /**
-   * Profile URLs Gloria has confirmed (LinkedIn, a professional register, …), used for
-   * JSON-LD `sameAs`. Empty until she supplies them (LAUNCH_BLOCKERS.md, `profile-links`).
-   */
-  profiles: [] as string[],
+  /** Profiles Gloria confirmed (2026-10-13), used for JSON-LD `sameAs`. Clean URLs, no share-tracking parameters. */
+  profiles: [
+    'https://www.linkedin.com/in/gloria-manyeruke-phd-a50a00a0',
+    'https://www.instagram.com/drgloria_psk',
+  ],
 } as const
 
 export const ui = {

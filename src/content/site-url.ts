@@ -1,6 +1,6 @@
 // Plain module with no imports: scripts/generate-seo-files.mjs loads it directly in Node.
-// Canonical host, no trailing slash. Placeholder until the domain is chosen (LAUNCH_BLOCKERS.md, `site-url`).
-export const SITE_URL = 'https://example.invalid'
+// Canonical host, no trailing slash. Apex domain; redirect www to it in Netlify (reference.md §12.2).
+export const SITE_URL = 'https://goldenchimeracounselling.com'
 
 export const siteUrlIsPlaceholder = SITE_URL.endsWith('.invalid')
 

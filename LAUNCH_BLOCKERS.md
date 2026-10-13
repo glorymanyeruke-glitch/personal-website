@@ -29,12 +29,10 @@ Placeholders in `src/content/site.ts` render visibly as `[PLACEHOLDER: …]`. A 
 
 - Languages she works in; Turkish version later? (§14.4)
 - Professional registration/licensing body and number to display (§14.5)
-- Domain name, sender address on that domain, and which inbox receives form messages (§14.9)
+- Sender address on goldenchimeracounselling.com (once the domain is verified in Resend); the inbox receiving messages is `drgloriapsy@gmail.com` (§14.9)
 - Auto-acknowledgement email to enquirers: yes or no (§14.12, default no)
 - Long-term owner of the Netlify, Resend and Cloudflare accounts (§14.13)
 
 ## SEO (set in code)
 
-- `site-url` — the production domain, in `src/content/site-url.ts` (`SITE_URL`). Until it's set, canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` all point at `https://example.invalid`. Set the canonical host (apex or `www`) to match the Netlify redirect (§12.2).
-- `profile-links` — LinkedIn / professional-register URLs Gloria confirms, for `seo.profiles` in `src/content/site.ts` (JSON-LD `sameAs`). Leave empty rather than guess.
 - Registration/licence number and in-person address are not in the structured data; add them once supplied (§14.2, §14.5).

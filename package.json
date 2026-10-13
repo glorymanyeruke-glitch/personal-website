@@ -10,6 +10,7 @@
     "dev": "vite dev",
     "prebuild": "node scripts/generate-seo-files.mjs",
     "build": "vite build",
+    "postbuild": "node scripts/generate-headers.mjs",
     "preview": "vite preview",
     "fonts:fallbacks": "node scripts/generate-font-fallbacks.mjs",
     "typecheck": "tsc --noEmit",

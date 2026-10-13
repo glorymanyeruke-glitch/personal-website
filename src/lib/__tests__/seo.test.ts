@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { seo } from '~/content/site'
 import { SITE_URL, siteUrlIsPlaceholder } from '~/content/site-url'
 import { absoluteUrl, homeJsonLd, jsonLdScript, pageHead } from '../seo'
 
@@ -33,8 +34,8 @@ describe('homeJsonLd', () => {
     expect(graph[1]).toMatchObject({ founder: { '@id': graph[0]?.['@id'] } })
   })
 
-  it('omits sameAs while no profiles are confirmed', () => {
-    expect(graph.every((n) => !('sameAs' in n))).toBe(true)
+  it('lists the confirmed profiles as sameAs', () => {
+    expect(graph.every((n) => n.sameAs?.length === seo.profiles.length)).toBe(true)
   })
 
   it('escapes < so the data cannot close its script tag', () => {
