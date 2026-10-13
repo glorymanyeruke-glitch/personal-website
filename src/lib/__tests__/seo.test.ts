@@ -5,13 +5,13 @@ import { SITE_URL, siteUrlIsPlaceholder } from '~/content/site-url'
 import { absoluteUrl, homeJsonLd, jsonLdScript, pageHead } from '../seo'
 
 describe('pageHead', () => {
-  const head = pageHead({ title: 'T', description: 'D', path: '/privacy' })
+  const head = pageHead({ title: 'T', description: 'D', path: '/privacy/' })
   const meta = (key: string) =>
     head.meta.find((m) => ('property' in m ? m.property : 'name' in m ? m.name : '') === key)
 
   it('sets an absolute canonical and og:url', () => {
-    expect(head.links[0]?.href).toBe(`${SITE_URL}/privacy`)
-    expect(meta('og:url')).toMatchObject({ content: `${SITE_URL}/privacy` })
+    expect(head.links[0]?.href).toBe(`${SITE_URL}/privacy/`)
+    expect(meta('og:url')).toMatchObject({ content: `${SITE_URL}/privacy/` })
   })
 
   it('uses an absolute 1200×630 image with alt text', () => {

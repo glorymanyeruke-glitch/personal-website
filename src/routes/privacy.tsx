@@ -9,7 +9,7 @@ export const Route = createFileRoute('/privacy')({
     pageHead({
       title: `${privacy.title} — ${seo.title}`,
       description: seo.privacyDescription,
-      path: '/privacy',
+      path: '/privacy/',
     }),
   component: PrivacyPage,
 })

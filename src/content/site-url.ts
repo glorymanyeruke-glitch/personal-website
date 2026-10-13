@@ -5,4 +5,4 @@ export const SITE_URL = 'https://goldenchimeracounselling.com'
 export const siteUrlIsPlaceholder = SITE_URL.endsWith('.invalid')
 
 /** Indexable pages, in sitemap order. `/404` is deliberately absent. */
-export const sitemapPaths = ['/', '/privacy'] as const
+export const sitemapPaths = ['/', '/privacy/'] as const
