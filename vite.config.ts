@@ -25,6 +25,11 @@ export default defineConfig({
         enabled: true,
         crawlLinks: true,
         failOnError: true,
+        // Netlify's build container once failed to reach the prerender server (ECONNREFUSED on a
+        // local port). One page at a time with a few retries keeps a one-off hiccup from failing the deploy.
+        concurrency: 1,
+        retryCount: 3,
+        retryDelay: 1500,
         // "/#about" etc. are the same document as "/".
         filter: ({ path }) => !path.includes('#'),
       },
