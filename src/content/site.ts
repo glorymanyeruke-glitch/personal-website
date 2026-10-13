@@ -292,7 +292,6 @@ export const contactSection = {
   success: {
     heading: 'Thank you, your message has been sent.',
     replyBefore: 'Gloria usually replies within',
-    // replyTime: ph('reply-time', 'Typical reply time for enquiries (§14.7).'),
     replyTime: '1 - 2 Business days',
     replyAfter: '.',
   },
