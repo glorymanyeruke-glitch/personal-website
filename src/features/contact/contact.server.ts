@@ -5,8 +5,8 @@ import { contactSchema, type ContactErrorCode, type ContactResult } from './sche
 import { sendEnquiry } from './send-email.server'
 import { clientIp, looksLikeBot, verifyTurnstile } from './spam.server'
 
-function fail(code: ContactErrorCode, requestId: string): ContactResult {
-  return { ok: false, code, message: contactSection.errors[code], requestId }
+function fail(code: ContactErrorCode, requestId: string, detail?: string): ContactResult {
+  return { ok: false, code, message: contactSection.errors[code], requestId, detail }
 }
 
 /**
@@ -40,8 +40,10 @@ export async function handleContact(raw: unknown): Promise<ContactResult> {
     env = getServerEnv()
   } catch (error) {
     if (!(error instanceof ServerEnvError)) throw error
-    log('contact.env_invalid', { ...done('error'), code: 'ENV_INVALID' })
-    return fail('SEND_FAILED', requestId)
+    // Problems name variables and reasons only, never values.
+    const detail = `env: ${error.problems.join(', ')}`
+    log('contact.env_invalid', { ...done('error'), code: 'ENV_INVALID', detail })
+    return fail('SEND_FAILED', requestId, detail)
   }
 
   const verified = await verifyTurnstile(input.turnstileToken, env.TURNSTILE_SECRET_KEY, clientIp())
@@ -60,8 +62,14 @@ export async function handleContact(raw: unknown): Promise<ContactResult> {
     requestId,
   )
   if (!sent.ok) {
-    log('contact.send_failed', { ...done('error'), code: 'SEND_FAILED', status: sent.status })
-    return fail('SEND_FAILED', requestId)
+    const detail = `${sent.reason}${sent.status ? ` ${String(sent.status)}` : ''}`
+    log('contact.send_failed', {
+      ...done('error'),
+      code: 'SEND_FAILED',
+      status: sent.status,
+      detail,
+    })
+    return fail('SEND_FAILED', requestId, detail)
   }
 
   log('contact.sent', done('ok'))

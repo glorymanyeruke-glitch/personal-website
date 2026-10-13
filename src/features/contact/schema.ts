@@ -65,4 +65,12 @@ export type ContactInput = z.infer<typeof contactSchema>
 export type ContactErrorCode = 'VALIDATION' | 'VERIFICATION_FAILED' | 'SEND_FAILED'
 
 export type ContactResult =
-  { ok: true } | { ok: false; code: ContactErrorCode; message: string; requestId: string }
+  | { ok: true }
+  | {
+      ok: false
+      code: ContactErrorCode
+      message: string
+      requestId: string
+      /** Short technical label shown next to the reference, e.g. `invalid_api_key 401`. No user data. */
+      detail?: string
+    }

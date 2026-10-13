@@ -38,6 +38,7 @@ type Failure = {
   code: 'VALIDATION' | 'VERIFICATION_FAILED' | 'SEND_FAILED'
   message: string
   requestId?: string
+  detail?: string
 }
 
 /** The error text for a field, once the visitor has left it or tried to send. */
@@ -106,6 +107,7 @@ export function ContactForm() {
         code: result.code,
         message: result.message,
         requestId: result.requestId || undefined,
+        detail: result.detail,
       })
       // A Turnstile token works once; get a new one for the next attempt.
       setToken('')
@@ -366,6 +368,7 @@ export function ContactForm() {
             {failure.requestId ? (
               <p className="mt-1 text-sm text-muted-on-dark">
                 {errors.reference} {failure.requestId}
+                {failure.detail ? ` · ${failure.detail}` : ''}
               </p>
             ) : null}
             {showFallback ? (

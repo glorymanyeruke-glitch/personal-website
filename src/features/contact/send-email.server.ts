@@ -47,7 +47,8 @@ export interface SendConfig {
   to: string
 }
 
-export type SendResult = { ok: true } | { ok: false; status?: number }
+/** `reason` is a short technical label (Resend's error name, `timeout`, …), never user data. */
+export type SendResult = { ok: true } | { ok: false; status?: number; reason: string }
 
 const TIMEOUT_MS = 10_000
 
@@ -56,7 +57,7 @@ async function attempt(
   config: SendConfig,
   input: ContactInput,
   idempotencyKey: string,
-): Promise<{ ok: true } | { ok: false; status?: number; retry: boolean }> {
+): Promise<{ ok: true } | { ok: false; status?: number; reason: string; retry: boolean }> {
   const { subject, text, html } = buildEmail(input)
   try {
     const { error } = await Promise.race([
@@ -80,9 +81,11 @@ async function attempt(
     if (!error) return { ok: true }
     const status =
       'statusCode' in error && typeof error.statusCode === 'number' ? error.statusCode : undefined
-    return { ok: false, status, retry: status === undefined || status >= 500 }
-  } catch {
-    return { ok: false, retry: true }
+    return { ok: false, status, reason: error.name, retry: status === undefined || status >= 500 }
+  } catch (thrown) {
+    const reason =
+      thrown instanceof Error ? (thrown.message === 'timeout' ? 'timeout' : thrown.name) : 'unknown'
+    return { ok: false, reason, retry: true }
   }
 }
 
@@ -95,5 +98,5 @@ export async function sendEnquiry(
   const resend = new Resend(config.apiKey)
   let result = await attempt(resend, config, input, requestId)
   if (!result.ok && result.retry) result = await attempt(resend, config, input, requestId)
-  return result.ok ? { ok: true } : { ok: false, status: result.status }
+  return result.ok ? { ok: true } : { ok: false, status: result.status, reason: result.reason }
 }

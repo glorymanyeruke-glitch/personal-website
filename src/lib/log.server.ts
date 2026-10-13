@@ -16,6 +16,8 @@ export interface LogFields {
   code?: string
   /** Upstream HTTP status (Resend, Turnstile), never a response body. */
   status?: number
+  /** Short technical label (error name, env variable names), never a value. */
+  detail?: string
 }
 
 type Level = 'info' | 'warn' | 'error'
