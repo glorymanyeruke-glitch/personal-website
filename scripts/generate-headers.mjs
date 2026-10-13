@@ -22,7 +22,9 @@ for (const file of htmlFiles(outDir)) {
   )) {
     // External scripts are covered by 'self'; JSON-LD is data and never executes.
     if (/\ssrc=/.test(attrs) || /ld\+json/.test(attrs) || body.trim() === '') continue
-    hashes.add(`'sha256-${createHash('sha256').update(body, 'utf8').digest('base64')}'`)
+    // The HTML parser turns NUL into U+FFFD in script text, and CSP hashes what the parser produced.
+    const text = body.replaceAll('\0', '\uFFFD')
+    hashes.add(`'sha256-${createHash('sha256').update(text, 'utf8').digest('base64')}'`)
   }
 }
 
